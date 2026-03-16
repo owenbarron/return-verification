@@ -1,0 +1,1725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Return Verification System — USEFULL</title>
+
+    <!-- Fonts via Google Fonts: DM Sans (body) + DM Serif Display (display) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+
+    <style>
+        /* ===========================================
+           CSS CUSTOM PROPERTIES — USEFULL BRAND THEME
+           Edit these to change the entire look at once.
+           =========================================== */
+        :root {
+            /* USEFULL Brand Colors */
+            --teal:       #008C95;
+            --teal-dark:  #006b72;
+            --teal-light: #00adb8;
+            --golden:     #D69A2D;
+            --golden-light: #e8b54a;
+            --slate:      #4C4C4E;
+            --slate-light: #6e6e70;
+            --foam:       #DDF0EE;
+            --fog:        #EDECE8;
+            --white:      #ffffff;
+
+            /* Typography */
+            --font-display: 'DM Serif Display', Georgia, serif;
+            --font-body:    'DM Sans', system-ui, sans-serif;
+
+            /* Responsive type scale using clamp() */
+            --title-size:    clamp(2.7rem, 6.75vw, 5.6rem);
+            --h2-size:       clamp(1.95rem, 4.2vw, 3.3rem);
+            --h3-size:       clamp(1.5rem, 3vw, 2.25rem);
+            --body-size:     clamp(1.1rem, 1.8vw, 1.5rem);
+            --small-size:    clamp(0.95rem, 1.4vw, 1.2rem);
+            --label-size:    clamp(0.85rem, 1.2vw, 1.05rem);
+
+            /* Responsive spacing */
+            --slide-padding: clamp(1.5rem, 4vw, 4rem);
+            --content-gap:   clamp(0.75rem, 2vw, 2rem);
+            --element-gap:   clamp(0.4rem, 1vw, 0.9rem);
+
+            /* Animation */
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --duration:      0.55s;
+        }
+
+        /* ===========================================
+           RESET & BASE
+           =========================================== */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            height: 100%;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--slate);
+            background: var(--fog);
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        /* ===========================================
+           SLIDE CONTAINER
+           CRITICAL: Every slide = exactly one viewport.
+           overflow: hidden prevents any scroll within slides.
+           =========================================== */
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            overflow: hidden;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Alternating backgrounds */
+        .slide.bg-white  { background: var(--white); }
+        .slide.bg-foam   { background: var(--foam); }
+        .slide.bg-fog    { background: var(--fog); }
+        .slide.bg-teal   { background: var(--teal); color: var(--white); }
+
+        /* ===========================================
+           HEADER BAR (logo + slide number)
+           Always 48px tall, sits above content area.
+           =========================================== */
+        .slide-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: clamp(0.6rem, 1.5vw, 1rem) var(--slide-padding);
+            flex-shrink: 0;
+            height: 52px;
+        }
+
+        .slide-header .logo {
+            height: clamp(20px, 3vh, 30px);
+            width: auto;
+            display: block;
+        }
+
+        .slide-num {
+            font-size: var(--label-size);
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--slate-light);
+            opacity: 0.7;
+        }
+        .slide.bg-teal .slide-num { color: rgba(255,255,255,0.5); }
+
+        /* ===========================================
+           CONTENT AREA
+           flex: 1 takes remaining space after header.
+           overflow: hidden as double-protection.
+           =========================================== */
+        .slide-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 var(--slide-padding) var(--slide-padding);
+            overflow: hidden;
+            max-height: calc(100vh - 52px);
+            max-height: calc(100dvh - 52px);
+        }
+
+        /* ===========================================
+           TYPOGRAPHY
+           =========================================== */
+        h1 {
+            font-family: var(--font-display);
+            font-size: var(--title-size);
+            font-weight: 400;
+            line-height: 1.1;
+            color: var(--teal);
+        }
+
+        h2 {
+            font-family: var(--font-display);
+            font-size: var(--h2-size);
+            font-weight: 400;
+            line-height: 1.2;
+            color: var(--teal);
+            margin-bottom: clamp(0.6rem, 1.5vh, 1.2rem);
+        }
+
+        h3 {
+            font-size: var(--h3-size);
+            font-weight: 600;
+            line-height: 1.3;
+            color: var(--teal);
+        }
+
+        .bg-teal h1,
+        .bg-teal h2,
+        .bg-teal h3 { color: var(--white); }
+
+        p {
+            font-size: var(--body-size);
+            line-height: 1.6;
+            color: var(--slate);
+        }
+
+        .bg-teal p { color: rgba(255,255,255,0.85); }
+
+        .eyebrow {
+            font-size: var(--label-size);
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--golden);
+            margin-bottom: clamp(0.4rem, 1vh, 0.8rem);
+        }
+
+        .bg-teal .eyebrow { color: var(--golden-light); }
+
+        /* ===========================================
+           ACCENT LINE
+           Teal left border for section callouts.
+           =========================================== */
+        .callout {
+            border-left: 3px solid var(--golden);
+            padding-left: clamp(0.6rem, 1.5vw, 1rem);
+        }
+
+        .callout-teal {
+            border-left: 3px solid var(--teal);
+            padding-left: clamp(0.6rem, 1.5vw, 1rem);
+        }
+
+        /* ===========================================
+           BULLET LISTS
+           =========================================== */
+        .bullet-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: var(--element-gap);
+        }
+
+        .bullet-list li {
+            font-size: var(--body-size);
+            line-height: 1.5;
+            color: var(--slate);
+            display: flex;
+            align-items: flex-start;
+            gap: 0.6em;
+        }
+
+        .bullet-list li::before {
+            content: '';
+            display: block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--teal);
+            flex-shrink: 0;
+            margin-top: 0.45em;
+        }
+
+        .bg-teal .bullet-list li { color: rgba(255,255,255,0.88); }
+        .bg-teal .bullet-list li::before { background: var(--golden-light); }
+
+        /* ===========================================
+           DIVIDER
+           =========================================== */
+        .divider {
+            width: clamp(2rem, 6vw, 4rem);
+            height: 2px;
+            background: var(--golden);
+            margin-bottom: clamp(0.8rem, 2vh, 1.5rem);
+        }
+
+        /* ===========================================
+           ANIMATIONS
+           .reveal = hidden by default.
+           .slide.visible .reveal = animated in.
+           JS adds .visible when slide enters viewport.
+           =========================================== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(18px);
+            transition: opacity var(--duration) var(--ease-out-expo),
+                        transform var(--duration) var(--ease-out-expo);
+        }
+
+        .slide.visible .reveal { opacity: 1; transform: translateY(0); }
+
+        /* Stagger children */
+        .reveal:nth-child(1) { transition-delay: 0.05s; }
+        .reveal:nth-child(2) { transition-delay: 0.15s; }
+        .reveal:nth-child(3) { transition-delay: 0.25s; }
+        .reveal:nth-child(4) { transition-delay: 0.35s; }
+        .reveal:nth-child(5) { transition-delay: 0.42s; }
+        .reveal:nth-child(6) { transition-delay: 0.49s; }
+
+        /* Fade only (no translate) variant */
+        .reveal-fade {
+            opacity: 0;
+            transition: opacity 0.7s var(--ease-out-expo);
+        }
+        .slide.visible .reveal-fade { opacity: 1; }
+
+        /* ===========================================
+           NAVIGATION DOTS
+           Fixed on right edge, indicate current slide.
+           =========================================== */
+        #nav-dots {
+            position: fixed;
+            right: clamp(0.6rem, 2vw, 1.2rem);
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            z-index: 100;
+        }
+
+        .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: rgba(76, 76, 78, 0.25);
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        .dot.active {
+            background: var(--teal);
+            transform: scale(1.4);
+        }
+
+        /* ===========================================
+           PROGRESS BAR
+           Thin teal line at top showing progress.
+           =========================================== */
+        #progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 2px;
+            background: var(--teal);
+            width: 0%;
+            z-index: 200;
+            transition: width 0.3s var(--ease-out-expo);
+        }
+
+        /* ===========================================
+           KEYBOARD HINT (fades out after first nav)
+           =========================================== */
+        #kbd-hint {
+            position: fixed;
+            bottom: 1.2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: var(--label-size);
+            color: var(--slate-light);
+            opacity: 0.5;
+            letter-spacing: 0.06em;
+            transition: opacity 0.5s;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        #kbd-hint.hidden { opacity: 0; }
+
+        /* ===========================================
+           SLIDE 1: TITLE
+           =========================================== */
+        .title-slide .slide-body {
+            justify-content: flex-end;
+            padding-bottom: clamp(2rem, 5vh, 4rem);
+        }
+
+        .title-slide h1 {
+            font-size: clamp(3rem, 8.25vw, 6.75rem);
+            line-height: 1.05;
+            max-width: 14ch;
+        }
+
+        .title-meta {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-top: clamp(1rem, 2.5vh, 2rem);
+        }
+
+        .title-meta span {
+            font-size: var(--body-size);
+            color: var(--slate-light);
+        }
+
+        .title-meta .sep {
+            width: 1px;
+            height: 1em;
+            background: var(--slate-light);
+            opacity: 0.4;
+        }
+
+        /* Large decorative teal block top-right */
+        .title-deco {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: clamp(200px, 35vw, 500px);
+            height: clamp(200px, 55vh, 600px);
+            background: var(--foam);
+            clip-path: polygon(100% 0, 100% 100%, 20% 100%, 0 0);
+            pointer-events: none;
+        }
+
+        .title-deco-inner {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: clamp(140px, 22vw, 320px);
+            height: clamp(140px, 36vh, 400px);
+            background: var(--teal);
+            opacity: 0.12;
+            clip-path: polygon(100% 0, 100% 100%, 30% 100%, 0 0);
+            pointer-events: none;
+        }
+
+        /* ===========================================
+           TWO-COLUMN LAYOUT
+           Used across several slides.
+           =========================================== */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: clamp(1rem, 3vw, 2.5rem);
+            align-items: start;
+        }
+
+        .two-col.wide-left  { grid-template-columns: 1.4fr 1fr; }
+        .two-col.wide-right { grid-template-columns: 1fr 1.4fr; }
+
+        /* ===========================================
+           COLUMN CARD
+           Bordered card used in 2 and 3-col layouts.
+           =========================================== */
+        .col-card {
+            background: var(--white);
+            border: 1px solid rgba(0,0,0,0.07);
+            border-radius: 8px;
+            padding: clamp(0.8rem, 2vw, 1.4rem);
+            height: 100%;
+        }
+
+        .col-card h3 {
+            font-size: var(--h3-size);
+            margin-bottom: 0.6em;
+        }
+
+        /* ===========================================
+           FLOW DIAGRAM (Slide 2)
+           Horizontal arrow chain.
+           =========================================== */
+        .flow-diagram {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            margin-top: clamp(1rem, 2.5vh, 2rem);
+            flex-wrap: nowrap;
+            overflow: hidden;
+        }
+
+        .flow-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .flow-circle {
+            width: clamp(44px, 7vw, 72px);
+            height: clamp(44px, 7vw, 72px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(1rem, 2vw, 1.6rem);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .flow-circle.teal   { background: var(--teal);   color: var(--white); }
+        .flow-circle.golden { background: var(--golden);  color: var(--white); }
+        .flow-circle.red    { background: #c0392b;         color: var(--white); }
+
+        .flow-label {
+            font-size: var(--small-size);
+            color: var(--slate);
+            margin-top: 0.5em;
+            line-height: 1.3;
+            max-width: 10ch;
+        }
+
+        .flow-arrow {
+            color: var(--teal);
+            font-size: clamp(1rem, 2.5vw, 1.8rem);
+            flex-shrink: 0;
+            padding: 0 clamp(0.2rem, 0.5vw, 0.5rem);
+            margin-bottom: 1.8em; /* align with circles */
+        }
+
+        /* The gap callout in the flow */
+        .flow-gap-label {
+            background: rgba(198, 57, 43, 0.08);
+            border: 1.5px dashed #c0392b;
+            border-radius: 6px;
+            padding: clamp(0.4rem, 1vh, 0.7rem) clamp(0.6rem, 1.5vw, 1rem);
+            text-align: center;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .flow-gap-label p {
+            font-size: var(--small-size);
+            color: #c0392b;
+            font-weight: 500;
+        }
+
+        /* ===========================================
+           TWO-COLUMN COMPARISON (Slide 3)
+           =========================================== */
+        .compare-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: clamp(0.8rem, 2vw, 1.5rem);
+            margin-top: clamp(0.6rem, 1.5vh, 1.2rem);
+        }
+
+        .compare-col {
+            border-radius: 8px;
+            padding: clamp(0.8rem, 2vw, 1.4rem);
+        }
+
+        .compare-col.solves {
+            background: rgba(0, 140, 149, 0.07);
+            border: 1px solid rgba(0, 140, 149, 0.2);
+        }
+
+        .compare-col.doesnt {
+            background: rgba(214, 154, 45, 0.07);
+            border: 1px solid rgba(214, 154, 45, 0.25);
+        }
+
+        .compare-col h3 {
+            font-size: var(--small-size);
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 0.7em;
+        }
+
+        .compare-col.solves h3 { color: var(--teal); }
+        .compare-col.doesnt h3 { color: var(--golden); }
+
+        /* ===========================================
+           QUOTE BLOCKS (Slide 4)
+           =========================================== */
+        .insight-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: clamp(0.6rem, 1.5vw, 1.2rem);
+            margin-top: clamp(0.5rem, 1.5vh, 1rem);
+        }
+
+        .insight-card {
+            background: var(--white);
+            border-radius: 8px;
+            padding: clamp(0.8rem, 2vw, 1.4rem);
+            border-top: 3px solid var(--teal);
+            display: flex;
+            flex-direction: column;
+            gap: 0.4em;
+        }
+
+        .insight-card .number {
+            font-family: var(--font-display);
+            font-size: clamp(1.4rem, 3vw, 2.5rem);
+            color: var(--teal);
+            line-height: 1;
+        }
+
+        .insight-card h3 {
+            font-size: var(--body-size);
+            font-weight: 600;
+            color: var(--slate);
+        }
+
+        .insight-card p {
+            font-size: var(--small-size);
+            color: var(--slate-light);
+            line-height: 1.5;
+        }
+
+        /* ===========================================
+           THROAT DIAGRAM (Slide 5)
+           Top-down SVG of the sensing zone.
+           =========================================== */
+        .throat-diagram-wrap {
+            display: flex;
+            gap: clamp(1rem, 3vw, 2.5rem);
+            align-items: center;
+            margin-top: clamp(0.5rem, 1.5vh, 1rem);
+            flex: 1;
+            min-height: 0;
+        }
+
+        .throat-diagram-wrap svg {
+            flex-shrink: 0;
+            width: clamp(200px, 38vw, 440px);
+            height: auto;
+        }
+
+        .throat-legend {
+            display: flex;
+            flex-direction: column;
+            gap: var(--element-gap);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.6em;
+            font-size: var(--small-size);
+            color: var(--slate);
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        /* ===========================================
+           BLOCK DIAGRAM (Slide 6)
+           =========================================== */
+        .block-diagram {
+            display: flex;
+            align-items: center;
+            gap: clamp(0.5rem, 1.5vw, 1rem);
+            margin-top: clamp(0.5rem, 1.5vh, 1rem);
+            flex-wrap: nowrap;
+            overflow: hidden;
+        }
+
+        .block-group {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.3rem, 0.8vh, 0.6rem);
+            flex-shrink: 0;
+        }
+
+        .block-box {
+            border-radius: 6px;
+            padding: clamp(0.4rem, 1vh, 0.7rem) clamp(0.6rem, 1.2vw, 1rem);
+            text-align: center;
+            font-size: var(--small-size);
+            font-weight: 500;
+            line-height: 1.3;
+        }
+
+        .block-box.cam  { background: rgba(0,140,149,0.12); border: 1px solid rgba(0,140,149,0.3); color: var(--teal-dark); }
+        .block-box.hub  { background: rgba(214,154,45,0.12); border: 1px solid rgba(214,154,45,0.35); color: #8a6000; }
+        .block-box.pc   { background: var(--teal); color: var(--white); }
+        .block-box.out  { background: var(--slate); color: var(--white); }
+        .block-box.pwr  { background: rgba(76,76,78,0.1); border: 1px solid rgba(76,76,78,0.2); color: var(--slate); }
+
+        .block-label {
+            font-size: var(--label-size);
+            color: var(--slate-light);
+            text-align: center;
+            margin-top: 0.2em;
+        }
+
+        .block-arrow {
+            font-size: clamp(1rem, 2.5vw, 1.6rem);
+            color: var(--teal);
+            flex-shrink: 0;
+        }
+
+        /* ===========================================
+           COST TABLE (Slide 8)
+           =========================================== */
+        .cost-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: var(--small-size);
+            margin-top: clamp(0.5rem, 1.5vh, 1rem);
+        }
+
+        .cost-table th {
+            background: var(--teal);
+            color: var(--white);
+            padding: clamp(0.35rem, 0.8vh, 0.55rem) clamp(0.6rem, 1vw, 0.9rem);
+            text-align: left;
+            font-weight: 500;
+            font-size: var(--label-size);
+            letter-spacing: 0.05em;
+        }
+
+        .cost-table th:not(:first-child) { text-align: right; }
+
+        .cost-table td {
+            padding: clamp(0.3rem, 0.7vh, 0.5rem) clamp(0.6rem, 1vw, 0.9rem);
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+            color: var(--slate);
+        }
+
+        .cost-table td:not(:first-child) { text-align: right; }
+
+        .cost-table tr.total td {
+            background: rgba(0,140,149,0.07);
+            font-weight: 600;
+            color: var(--teal-dark);
+            border-top: 1.5px solid var(--teal);
+            border-bottom: none;
+        }
+
+        .cost-table tr:nth-child(even):not(.total) td {
+            background: rgba(0,0,0,0.02);
+        }
+
+        /* ===========================================
+           THREE-COLUMN OPTIONS (Slide 10)
+           =========================================== */
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: clamp(0.7rem, 1.5vw, 1.2rem);
+            margin-top: clamp(0.5rem, 1.5vh, 1rem);
+            align-items: stretch;
+        }
+
+        .option-card {
+            border-radius: 8px;
+            padding: clamp(0.8rem, 2vw, 1.4rem);
+            background: var(--white);
+            border: 1px solid rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5em;
+        }
+
+        .option-label {
+            font-size: var(--label-size);
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--golden);
+        }
+
+        .option-card h3 {
+            font-size: var(--body-size);
+            font-weight: 600;
+            color: var(--slate);
+            line-height: 1.3;
+        }
+
+        .option-meta {
+            font-size: var(--small-size);
+            color: var(--slate-light);
+        }
+
+        .pro-con {
+            margin-top: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25em;
+        }
+
+        .pro-con span {
+            font-size: var(--small-size);
+            line-height: 1.4;
+            display: flex;
+            gap: 0.4em;
+        }
+
+        .pro-con .pro { color: var(--teal-dark); }
+        .pro-con .con { color: var(--slate-light); }
+
+        .pro-con .marker { flex-shrink: 0; font-weight: 700; }
+
+        /* ===========================================
+           UNKNOWNS GRID (Slide 11)
+           =========================================== */
+        .unknowns-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: clamp(0.6rem, 1.5vw, 1rem);
+            margin-top: clamp(0.4rem, 1vh, 0.8rem);
+        }
+
+        .unknown-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.7em;
+            font-size: var(--small-size);
+            color: var(--slate);
+            line-height: 1.5;
+        }
+
+        .unknown-icon {
+            width: 18px;
+            height: 18px;
+            border-radius: 3px;
+            background: rgba(214,154,45,0.15);
+            border: 1px solid rgba(214,154,45,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 0.1em;
+        }
+
+        /* ===========================================
+           NEXT STEPS LIST (Slide 11)
+           =========================================== */
+        .steps-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.3rem, 0.8vh, 0.6rem);
+        }
+
+        .steps-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.7em;
+            font-size: var(--small-size);
+            line-height: 1.5;
+        }
+
+        .step-num {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--teal);
+            color: var(--white);
+            font-size: 10px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 0.1em;
+        }
+
+        /* ===========================================
+           BOTTOM LINE CALLOUT
+           =========================================== */
+        .bottom-line {
+            background: rgba(0,140,149,0.06);
+            border: 1px solid rgba(0,140,149,0.18);
+            border-left: 4px solid var(--teal);
+            border-radius: 0 6px 6px 0;
+            padding: clamp(0.6rem, 1.5vh, 1rem) clamp(0.8rem, 2vw, 1.4rem);
+            margin-top: clamp(0.6rem, 1.5vh, 1rem);
+        }
+
+        .bottom-line p {
+            font-size: var(--small-size);
+            line-height: 1.6;
+            color: var(--teal-dark);
+            font-style: italic;
+        }
+
+        /* ===========================================
+           RESPONSIVE BREAKPOINTS
+           =========================================== */
+        @media (max-height: 700px) {
+            :root {
+                --slide-padding: clamp(1rem, 3vw, 2rem);
+                --content-gap:   clamp(0.5rem, 1.5vw, 1rem);
+                --title-size:    clamp(2.25rem, 6vw, 4.2rem);
+                --h2-size:       clamp(1.65rem, 3.75vw, 2.7rem);
+                --body-size:     clamp(0.9rem, 1.5vw, 1.2rem);
+                --small-size:    clamp(0.8rem, 1.2vw, 1rem);
+            }
+        }
+
+        @media (max-height: 600px) {
+            :root {
+                --slide-padding: clamp(0.75rem, 2.5vw, 1.5rem);
+                --title-size:    clamp(1.875rem, 5.25vw, 3rem);
+                --h2-size:       clamp(1.5rem, 3vw, 2.25rem);
+                --body-size:     clamp(0.85rem, 1.3vw, 1.05rem);
+                --small-size:    clamp(0.75rem, 1.1vw, 0.92rem);
+            }
+            #nav-dots, #kbd-hint { display: none; }
+            .slide-header { height: 40px; }
+        }
+
+        @media (max-height: 500px) {
+            :root {
+                --slide-padding: clamp(0.5rem, 2vw, 1rem);
+                --title-size:    clamp(1.65rem, 4.5vw, 2.4rem);
+                --body-size:     clamp(0.75rem, 1.2vw, 0.95rem);
+                --small-size:    clamp(0.65rem, 1vw, 0.82rem);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .two-col,
+            .two-col.wide-left,
+            .two-col.wide-right { grid-template-columns: 1fr; }
+
+            .options-grid { grid-template-columns: 1fr; gap: 0.5rem; }
+            .option-card  { flex-direction: row; flex-wrap: wrap; gap: 0.4rem; }
+
+            .compare-grid { grid-template-columns: 1fr; }
+            .insight-grid { grid-template-columns: 1fr 1fr; }
+            .unknowns-grid { grid-template-columns: 1fr; }
+        }
+
+        /* ===========================================
+           REDUCED MOTION
+           =========================================== */
+        @media (prefers-reduced-motion: reduce) {
+            .reveal, .reveal-fade {
+                transition: opacity 0.2s ease;
+                transform: none;
+            }
+            html { scroll-behavior: auto; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Progress indicator -->
+<div id="progress"></div>
+
+<!-- Navigation dots -->
+<nav id="nav-dots" aria-label="Slide navigation"></nav>
+
+<!-- Keyboard hint -->
+<div id="kbd-hint">Arrow keys or scroll to navigate</div>
+
+
+<!-- =============================================
+     SLIDE 1 — TITLE
+     ============================================= -->
+<section class="slide bg-foam title-slide" id="slide-1" aria-label="Title slide">
+    <!-- Decorative shapes -->
+    <div class="title-deco" aria-hidden="true"></div>
+    <div class="title-deco-inner" aria-hidden="true"></div>
+
+    <header class="slide-header">
+        <img src="USEFULL-icons/USEFULL-Logo-Registered_Color.svg" alt="USEFULL" class="logo">
+        <span class="slide-num">01 / 11</span>
+    </header>
+
+    <div class="slide-body">
+        <div class="eyebrow reveal">Feasibility Research</div>
+        <h1 class="reveal">Return Verification System</h1>
+        <div class="divider reveal"></div>
+        <p class="reveal" style="max-width: 48ch; color: var(--slate-light);">One potential build plan — AI camera verification for USEFULL return bins</p>
+        <div class="title-meta reveal">
+            <span>Owen Barron</span>
+            <span class="sep"></span>
+            <span>March 2026</span>
+        </div>
+    </div>
+</section>
+
+
+<!-- =============================================
+     SLIDE 2 — THE PROBLEM WE WERE ASKED TO SOLVE
+     ============================================= -->
+<section class="slide bg-white" id="slide-2" aria-label="The Problem We Were Asked to Solve">
+    <header class="slide-header">
+        <img src="USEFULL-icons/USEFULL-Logo-Registered_Color.svg" alt="USEFULL" class="logo">
+        <span class="slide-num">02 / 11</span>
+    </header>
+    <div class="slide-body">
+        <div class="eyebrow reveal">Starting Point</div>
+        <h2 class="reveal">The Problem We Were Asked to Solve</h2>
+
+        <p class="reveal" style="max-width: 60ch; margin-bottom: clamp(0.5rem, 1.5vh, 1rem);">
+            Alison's ask: can we use an AI camera to verify containers are actually returned after a QR scan?
+        </p>
+
+        <!-- Flow diagram: scan → expect → gap? -->
+        <div class="reveal" style="display: flex; align-items: stretch; gap: 0; margin-top: clamp(1rem, 2.5vh, 2rem); max-width: 860px;">
+            <div style="flex: 1; background: var(--teal); color: var(--white); border-radius: 8px 0 0 8px; padding: clamp(0.8rem, 1.5vw, 1.2rem); display: flex; align-items: center; gap: 0.8em;">
+                <span style="font-family: var(--font-display); font-size: clamp(1.6rem, 3vw, 2.4rem); opacity: 0.4;">1</span>
+                <span style="font-size: var(--small-size); line-height: 1.3;">Student scans QR code</span>
+            </div>
+            <div style="flex: 0 0 auto; display: flex; align-items: center; background: var(--teal); padding: 0 0.3em;">
+                <span style="color: rgba(255,255,255,0.4); font-size: 1.2rem;">→</span>
+            </div>
+            <div style="flex: 1; background: var(--teal); color: var(--white); padding: clamp(0.8rem, 1.5vw, 1.2rem); display: flex; align-items: center; gap: 0.8em;">
+                <span style="font-family: var(--font-display); font-size: clamp(1.6rem, 3vw, 2.4rem); opacity: 0.4;">2</span>
+                <span style="font-size: var(--small-size); line-height: 1.3;">System expects a return</span>
+            </div>
+            <div style="flex: 0 0 auto; display: flex; align-items: center; background: linear-gradient(90deg, var(--teal), rgba(192,57,43,0.12)); padding: 0 0.3em;">
+                <span style="color: rgba(255,255,255,0.4); font-size: 1.2rem;">→</span>
+            </div>
+            <div style="flex: 1.3; background: rgba(192,57,43,0.08); border: 1.5px dashed rgba(192,57,43,0.4); border-radius: 0 8px 8px 0; padding: clamp(0.8rem, 1.5vw, 1.2rem); display: flex; align-items: center; gap: 0.8em;">
+                <span style="font-family: var(--font-display); font-size: clamp(1.6rem, 3vw, 2.4rem); color: #c0392b; opacity: 0.5;">?</span>
+                <span style="font-size: var(--small-size); line-height: 1.3; color: #c0392b; font-weight: 500;">Did a real container actually drop?</span>
+            </div>
+        </div>
+
+        <div class="callout reveal" style="margin-top: clamp(0.8rem, 2vh, 1.4rem); max-width: 62ch;">
+            <p style="font-size: var(--small-size); color: var(--slate);">
+                Current vulnerability: a student can scan the QR code, walk away without dropping, or drop trash to trigger a simple sensor — and receive credit.
+            </p>
+        </div>
+    </div>
+</section>
+
+
+<!-- =============================================
+     SLIDE 3 — BUT IS THIS THE RIGHT PROBLEM?
+     ============================================= -->
+<section class="slide bg-fog" id="slide-3" aria-label="But Is This the Right Problem?">
+    <header class="slide-header">
+        <img src="USEFULL-icons/USEFULL-Logo-Registered_Color.svg" alt="USEFULL" class="logo">
+        <span class="slide-num">03 / 11</span>
+    </header>
+    <div class="slide-body">
+        <div class="eyebrow reveal">Field Evidence</div>
+        <h2 class="reveal">But Is This the Right Problem?</h2>
+
+        <div class="compare-grid reveal">
+            <div class="compare-col solves">
+                <h3>What camera verification solves</h3>
+                <ul class="bullet-list">
+                    <li>Scan-and-walk-away (QR scanned, nothing dropped)</li>
+                    <li>Fake drops (trash triggered instead of container)</li>
+                    <li>Verifiable return event in the system of record</li>
+                </ul>
+            </div>
+            <div class="compare-col doesnt">
+                <h3>What it doesn't solve</h3>
+                <ul class="bullet-list">
+                    <li>Containers never brought back at all (NAU's reported problem)</li>
+                    <li>Student-employee collusion to skip checkout entirely</li>
+                    <li>Student protest and non-participation (UMass Lowell)</li>
+                    <li>Loss at other points in the container lifecycle</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="callout reveal" style="margin-top: clamp(0.6rem, 1.5vh, 1.2rem); border-color: var(--golden); max-width: 68ch;">
+            <p style="font-size: var(--small-size);">
+                A camera system solves a specific failure mode. Before investing, we should confirm this failure mode is actually driving losses.
+            </p>
+        </div>
+    </div>
+</section>
+
+
+<!-- =============================================
+     SLIDE 4 — WHAT JOSHUA TOLD US
+     ============================================= -->
+<section class="slide bg-white" id="slide-4" aria-label="What Joshua Told Us">
+    <header class="slide-header">
+        <img src="USEFULL-icons/USEFULL-Logo-Registered_Color.svg" alt="USEFULL" class="logo">
+        <span class="slide-num">04 / 11</span>
+    </header>
+    <div class="slide-body">
+        <div class="eyebrow reveal">Expert Guidance</div>
+        <h2 class="reveal">What Joshua Told Us</h2>
+        <p class="reveal" style="font-size: var(--small-size); color: var(--slate-light); max-width: 68ch; margin-bottom: clamp(0.5rem, 1.5vh, 1rem);">
+            Joshua is CEO of Amherst Intelligence Security, referred by Igor. After advising on the concept, he unexpectedly offered to work with us directly in his personal capacity — he's genuinely excited by the problem. The throat architecture below was developed based on his guidance.
+        </p>
+
+        <div class="insight-grid reveal">
+            <div class="insight-card">
+                <div class="number">01</div>
+                <h3>Don't point into the bin</h3>
+                <p>A messy pile of wet containers is a dead end. Focus on the entrance — the throat — where the scene can be controlled.</p>
+            </div>
+            <div class="insight-card">
+                <div class="number">02</div>
+                <h3>More cameras beats better cameras</h3>
+                <p>Multiple inexpensive cameras collecting data from more angles outperforms a single high-end unit.</p>
+            </div>
+            <div class="insight-card">
+                <div class="number">03</div>
+                <h3>You need a lot of data</h3>
+                <p>This is a scaling problem. The model needs thousands of real return events in real-world variation before it's useful.</p>
+            </div>
+            <div class="insight-card">
+                <div class="number">04</div>
+                <h3>Expect a long iteration cycle</h3>
+                <p>Even with the right approach, getting something that works even a little in a real food-court environment takes significant time and tuning.</p>
+            </div>
+        </div>
+
+        <div class="callout-teal reveal" style="margin-top: clamp(0.5rem, 1.5vh, 1rem);">
+            <p style="font-size: var(--small-size); color: var(--teal-dark); font-weight: 500;">Design principle from Joshua: Watch the passage, not the pile. The throat concept on the next slide was built on this advice.</p>
+        </div>
+    </div>
+</section>
+
+
+<!-- =============================================
+     SLIDE 5 — THE THROAT CONCEPT
+     ============================================= -->
+<section class="slide bg-foam" id="slide-5" aria-label="The Throat Concept">
+    <header class="slide-header">
+        <img src="USEFULL-icons/USEFULL-Logo-Registered_Color.svg" alt="USEFULL" class="logo">
+        <span class="slide-num">05 / 11</span>
+    </header>
+    <div class="slide-body">
+        <div class="eyebrow reveal">Sensing Architecture — Developed with Joshua</div>
+        <h2 class="reveal">The Throat Concept</h2>
+
+        <div class="throat-diagram-wrap reveal">
+            <!-- Top-down SVG diagram of the throat sensing zone -->
+            <svg viewBox="0 0 360 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Top-down diagram of return station throat with camera positions">
+                <!-- Background -->
+                <rect x="0" y="0" width="360" height="280" fill="#f7fcfb" rx="8"/>
+
+                <!-- Outer bin walls (simplified) -->
+                <rect x="30" y="40" width="300" height="200" rx="6" fill="none" stroke="#9AADA4" stroke-width="2" stroke-dasharray="6,4"/>
+                <text x="180" y="258" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#9AADA4">Bin body (not to scale)</text>
+
+                <!-- Left rail -->
+                <rect x="60" y="80" width="38" height="120" rx="4" fill="rgba(0,140,149,0.15)" stroke="#008C95" stroke-width="1.5"/>
+                <text x="79" y="145" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#008C95" font-weight="600">LEFT</text>
+                <text x="79" y="157" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#008C95">RAIL</text>
+                <text x="79" y="169" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#008C95">1.75"</text>
+
+                <!-- Right rail -->
+                <rect x="262" y="80" width="38" height="120" rx="4" fill="rgba(0,140,149,0.15)" stroke="#008C95" stroke-width="1.5"/>
+                <text x="281" y="145" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#008C95" font-weight="600">RIGHT</text>
+                <text x="281" y="157" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#008C95">RAIL</text>
+                <text x="281" y="169" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#008C95">1.75"</text>
+
+                <!-- Throat clear zone -->
+                <rect x="98" y="80" width="164" height="120" fill="rgba(221,240,238,0.7)" stroke="none"/>
+                <text x="180" y="135" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#4C4C4E" font-weight="500">CLEAR THROAT</text>
+                <text x="180" y="149" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#6e6e70">10.5"</text>
+
+                <!-- Zone labels above (entry / passage / commit) -->
+                <text x="180" y="75" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="8" fill="#6e6e70" letter-spacing="1">ENTRY → PASSAGE → COMMIT</text>
+                <line x1="98" y1="78" x2="262" y2="78" stroke="#9AADA4" stroke-width="0.75" stroke-dasharray="3,2"/>
+
+                <!-- Total width brace -->
+                <line x1="60" y1="215" x2="300" y2="215" stroke="#4C4C4E" stroke-width="0.75"/>
+                <line x1="60" y1="210" x2="60" y2="220" stroke="#4C4C4E" stroke-width="0.75"/>
+                <line x1="300" y1="210" x2="300" y2="220" stroke="#4C4C4E" stroke-width="0.75"/>
+                <text x="180" y="230" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#4C4C4E">14" slot envelope</text>
+
+                <!-- Camera A — left rail, cross-view main -->
+                <circle cx="79" cy="100" r="7" fill="#008C95"/>
+                <text x="55" y="96" text-anchor="end" font-family="DM Sans,sans-serif" font-size="8" fill="#008C95" font-weight="700">A</text>
+                <line x1="86" y1="100" x2="140" y2="107" stroke="#008C95" stroke-width="0.75" stroke-dasharray="3,2" opacity="0.6"/>
+
+                <!-- Camera B — right rail, cross-view main -->
+                <circle cx="281" cy="100" r="7" fill="#008C95"/>
+                <text x="295" y="96" font-family="DM Sans,sans-serif" font-size="8" fill="#008C95" font-weight="700">B</text>
+                <line x1="274" y1="100" x2="220" y2="107" stroke="#008C95" stroke-width="0.75" stroke-dasharray="3,2" opacity="0.6"/>
+
+                <!-- Camera C — left rail, entry watcher -->
+                <circle cx="79" cy="165" r="7" fill="#D69A2D"/>
+                <text x="55" y="161" text-anchor="end" font-family="DM Sans,sans-serif" font-size="8" fill="#D69A2D" font-weight="700">C</text>
+                <line x1="86" y1="163" x2="120" y2="155" stroke="#D69A2D" stroke-width="0.75" stroke-dasharray="3,2" opacity="0.7"/>
+
+                <!-- Camera D — right rail, commit watcher -->
+                <circle cx="281" cy="165" r="7" fill="#D69A2D"/>
+                <text x="295" y="161" font-family="DM Sans,sans-serif" font-size="8" fill="#D69A2D" font-weight="700">D</text>
+                <line x1="274" y1="163" x2="240" y2="155" stroke="#D69A2D" stroke-width="0.75" stroke-dasharray="3,2" opacity="0.7"/>
+            </svg>
+
+            <!-- Legend -->
+            <div class="throat-legend">
+                <p style="font-size: var(--small-size); color: var(--slate); font-weight: 600; margin-bottom: 0.2em;">4 cameras, 2 rails</p>
+                <div class="legend-item"><div class="legend-dot" style="background: var(--teal);"></div> A, B — Cross-view main (teal)</div>
+                <div class="legend-item"><div class="legend-dot" style="background: var(--golden);"></div> C, D — Entry/commit watchers (golden)</div>
+                <div class="legend-item"><div class="legend-dot" style="background: var(--foam); border: 1px solid #9AADA4;"></div> Polycarbonate windows — cameras in sealed pockets</div>
+
+                <div style="margin-top: clamp(0.6rem, 1.5vh, 1rem);">
+                    <p style="font-size: var(--small-size); color: var(--slate); font-weight: 600; margin-bottom: 0.4em;">Detection question</p>
+                    <p style="font-size: var(--small-size); line-height: 1.5; color: var(--slate);">Did something substantial pass fully through the throat after a QR scan?</p>
+                </div>
+
+                <ul class="bullet-list" style="margin-top: 0.4em;">
+                    <li>USB cameras — no bulky electronics in the wet zone</li>
+                    <li>Cameras sealed behind polycarbonate windows</li>
+                    <li>Scan-triggered capture window</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- =============================================
+     SLIDE 6 — WHAT'S INSIDE THE SYSTEM
+     ============================================= -->
+<section class="slide bg-white" id="slide-6" aria-label="What's Inside the System">
+    <header class="slide-header">
+        <img src="USEFULL-icons/USEFULL-Logo-Registered_Color.svg" alt="USEFULL" class="logo">
+        <span class="slide-num">06 / 11</span>
+    </header>
+    <div class="slide-body">
+        <div class="eyebrow reveal">System Architecture</div>
+        <h2 class="reveal">What's Inside the System</h2>
+
+        <!-- Block diagram: Rails → USB hub → Mini PC → Ethernet out / Power in -->
+        <div class="block-diagram reveal" aria-label="System block diagram">
+            <!-- Rails group -->
+            <div class="block-group">
+                <div class="block-label">WET ZONE</div>
+                <div class="block-box cam">Camera A</div>
+                <div class="block-box cam">Camera B</div>
+                <div class="block-box cam">Camera C</div>
+                <div class="block-box cam">Camera D</div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;align-items:center;gap:0.2em;">
+                <div class="block-label" style="opacity:0;">&nbsp;</div>
+                <div class="block-arrow">→</div>
+                <div style="font-size:var(--label-size);color:var(--slate-light);text-align:center;line-height:1.3;">USB<br>cables</div>
+                <div class="block-arrow">→</div>
+            </div>
+
+            <!-- Dry bay group -->
+            <div class="block-group">
+                <div class="block-label">DRY BAY (SEALED)</div>
+                <div class="block-box hub">Powered USB Hub</div>
+                <div class="block-box pc">Mini PC (edge compute)</div>
+                <div class="block-box pwr">Power distribution</div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1em;padding-top:1.4em;">
+                <div style="display:flex;flex-direction:column;align-items:center;gap:0.2em;">
+                    <div class="block-arrow" style="transform:rotate(0deg);">→</div>
+                    <div style="font-size:var(--label-size);color:var(--slate-light);">Ethernet out</div>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:0.2em;">
+                    <div class="block-arrow" style="transform:rotate(180deg);">→</div>
+                    <div style="font-size:var(--label-size);color:var(--slate-light);">Power in</div>
+                </div>
+            </div>
+
+            <!-- Outputs group -->
+            <div class="block-group" style="justify-content:center;">
+                <div class="block-label">BUILDING INFRASTRUCTURE</div>
+                <div class="block-box out">USEFULL Server</div>
+                <div class="block-box pwr">Facility power</div>
+            </div>
+        </div>
+
+        <div class="two-col reveal" style="margin-top: clamp(0.8rem, 2vh, 1.4rem); gap: clamp(0.8rem, 2vw, 1.4rem);">
+            <div class="callout">
+                <p style="font-size: var(--small-size);">
+                    <strong>Wet zone:</strong> Only optics. Cameras sit in sealed pockets behind polycarbonate windows. No circuitry exposed to moisture or food residue.
+                </p>
+            </div>
+            <div class="callout">
+                <p style="font-size: var(--small-size);">
+                    <strong>Field serviceability:</strong> Swap the compute node or USB hub without touching individual camera boards. Single Ethernet out, single power in.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- =============================================
+     SLIDE 7 — THE MODULARITY CHALLENGE
+     ============================================= -->
+<section class="slide bg-fog" id="slide-7" aria-label="The Modularity Challenge">
+    <header class="slide-header">
+        <img src="USEFULL-icons/USEFULL-Logo-Registered_Color.svg" alt="USEFULL" class="logo">
+        <span class="slide-num">07 / 11</span>
+    </header>
+    <div class="slide-body">
+        <div class="eyebrow reveal">Design Constraint</div>
+        <h2 class="reveal">The Modularity Challenge</h2>
+
+        <div class="two-col wide-left reveal" style="align-items: center; gap: clamp(1rem, 3vw, 2.5rem);">
+            <!-- Return station concept image -->
+            <div>
+                <p style="font-size: var(--label-size); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--teal); margin-bottom: 0.5em;">USEFULL Return Station Concept</p>
+                <img src="images/returnstation.png"
+                     alt="USEFULL return station concept showing the controlled slot geometry"
+                     style="width: 100%; max-height: min(42vh, 320px); object-fit: contain; border-radius: 8px;">
+                <p style="font-size: var(--small-size); color: var(--slate-light); margin-top: 0.4em;">14" slot, controlled geometry, designed for this system</p>
+            </div>
+
+            <!-- Right side: the problem + question mark -->
+            <div style="display: flex; flex-direction: column; gap: var(--element-gap);">
+                <ul class="bullet-list">
+                    <li>This concept was designed for USEFULL's own return station — a controlled, known geometry.</li>
+                    <li>NAU may want to use their existing bins. Different geometries, different slot sizes, different internals.</li>
+                    <li>A fully modular "drop-in" system that works in any bin is significantly harder and more expensive.</li>
+                </ul>
+
+                <div style="margin-top: clamp(0.6rem, 1.5vh, 1rem); background: rgba(214,154,45,0.08); border: 1.5px solid rgba(214,154,45,0.35); border-radius: 8px; padding: clamp(0.6rem, 1.5vw, 1rem);">
+                    <p style="font-size: var(--small-size); font-weight: 600; color: #8a6000; margin-bottom: 0.3em;">Recommendation</p>
+                    <p style="font-size: var(--small-size); color: var(--slate);">A pilot should target one known bin design to prove the concept before attempting modularity.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- =============================================
+     SLIDE 8 — WHAT WOULD THIS COST?
+     ============================================= -->
+<section class="slide bg-white" id="slide-8" aria-label="What Would This Cost?">
+    <header class="slide-header">
+        <img src="USEFULL-icons/USEFULL-Logo-Registered_Color.svg" alt="USEFULL" class="logo">
+        <span class="slide-num">08 / 11</span>
+    </header>
+    <div class="slide-body">
+        <div class="eyebrow reveal">Budget Reality</div>
+        <h2 class="reveal">What Would This Cost?</h2>
+
+        <div class="callout reveal" style="max-width: 68ch; margin-bottom: clamp(0.5rem, 1.5vh, 1rem);">
+            <p style="font-size: var(--small-size);">
+                Joshua's initial estimate: <strong>$10k–$15k all-in</strong> for his work (4–5 months, ~60 days on-site testing). He'd need details — timeline, number of bins, whether we're retrofitting, per-bin budget — before a full quote. We're planning around <strong>~$8k for his labor</strong>. This does not include hardware, fabrication, USEFULL software integration, or the dev workstation.
+            </p>
+        </div>
+
+        <table class="cost-table reveal" aria-label="Full cost breakdown">
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>2-Bin Pilot</th>
+                    <th>9-Bin Full Rollout</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Hardware + installation</td>
+                    <td>$3.5k – $6.1k</td>
+                    <td>$15.7k – $27.4k</td>
+                </tr>
+                <tr>
+                    <td>Housing / rail design + fabrication</td>
+                    <td>$6k – $15k</td>
+                    <td>$6k – $15k</td>
+                </tr>
+                <tr>
+                    <td>Dev workstation</td>
+                    <td>$2.5k – $4k</td>
+                    <td>$2.5k – $4k</td>
+                </tr>
+                <tr>
+                    <td>USEFULL software integration (Nadia + Yulia)</td>
+                    <td>$15k – $27k</td>
+                    <td>$15k – $27k</td>
+                </tr>
+                <tr>
+                    <td>Consultant labor (Joshua)</td>
+                    <td>~$8k</td>
+                    <td>~$8k</td>
+                </tr>
+                <tr class="total">
+                    <td>All-in with 20% contingency</td>
+                    <td>~$36k – $65k</td>
+                    <td>~$50k – $89k</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p class="reveal" style="font-size: var(--small-size); color: var(--slate-light); margin-top: clamp(0.4rem, 1vh, 0.7rem);">
+            The camera electronics (~$400/bin) are not the expensive part. Software integration, mechanical packaging, and real-world iteration are. Joshua emphasizes: expect a long cycle to get even basic reliability.
+            <br>Recurring cloud/inference: est. $500–$1,200/month if hosted inference is used later.
+        </p>
+    </div>
+</section>
+
+
+<!-- =============================================
+     SLIDE 9 — USEFULL SOFTWARE INTEGRATION
+     ============================================= -->
+<section class="slide bg-foam" id="slide-9" aria-label="USEFULL Software Integration">
+    <header class="slide-header">
+        <img src="USEFULL-icons/USEFULL-Logo-Registered_Color.svg" alt="USEFULL" class="logo">
+        <span class="slide-num">09 / 11</span>
+    </header>
+    <div class="slide-body">
+        <div class="eyebrow reveal">The Hidden Bulk</div>
+        <h2 class="reveal">USEFULL Software Integration — The Largest Cost</h2>
+        <p class="reveal" style="font-size: var(--small-size); color: var(--slate-light); margin-bottom: clamp(0.5rem, 1.5vh, 1rem);">
+            Even if the camera system works perfectly, USEFULL still needs significant dev effort to make it operationally useful.
+        </p>
+
+        <div class="two-col reveal" style="align-items: start;">
+            <div>
+                <p style="font-size: var(--small-size); font-weight: 600; color: var(--teal); margin-bottom: 0.6em; text-transform: uppercase; letter-spacing: 0.08em;">Nadia — Hours by Task</p>
+                <table class="cost-table" style="margin-top: 0;" aria-label="Dev hours breakout">
+                    <thead>
+                        <tr>
+                            <th>Work Package</th>
+                            <th>Hours</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Integration design + interface definition</td><td>10–18</td></tr>
+                        <tr><td>Event ingestion pipeline</td><td>14–25</td></tr>
+                        <tr><td>DB / schema work</td><td>8–17</td></tr>
+                        <tr><td>Scan ↔ return matching logic (hardest)</td><td>28–49</td></tr>
+                        <tr><td>"Scanned but not dropped" workflows</td><td>18–35</td></tr>
+                        <tr><td>Ops / support tooling</td><td>14–28</td></tr>
+                        <tr><td>Logging / observability</td><td>14–25</td></tr>
+                        <tr><td>QA support + bug fixing + rollout</td><td>21–39</td></tr>
+                        <tr><td>Knowledge transfer / coordination</td><td>10–18</td></tr>
+                        <tr class="total"><td>Total Nadia</td><td>137–254</td></tr>
+                    </tbody>
+                </table>
+                <p style="font-size: var(--label-size); color: var(--slate-light); margin-top: 0.4em;">Yulia (QA): 42–84 hours in parallel</p>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: var(--element-gap);">
+                <p style="font-size: var(--small-size); font-weight: 600; color: var(--teal); text-transform: uppercase; letter-spacing: 0.08em;">Estimates</p>
+
+                <div class="col-card" style="border-top: 3px solid var(--teal);">
+                    <p style="font-size: var(--label-size); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--slate-light);">Nadia (Dev)</p>
+                    <p style="font-size: var(--body-size); font-weight: 700; color: var(--teal); margin: 0.2em 0;">$12k – $23k</p>
+                    <p style="font-size: var(--small-size); color: var(--slate-light);">137–254 focused hours at ~$90/hr loaded</p>
+                </div>
+
+                <div class="col-card" style="border-top: 3px solid var(--golden);">
+                    <p style="font-size: var(--label-size); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--slate-light);">Yulia (QA)</p>
+                    <p style="font-size: var(--body-size); font-weight: 700; color: var(--golden); margin: 0.2em 0;">$1.9k – $3.8k</p>
+                    <p style="font-size: var(--small-size); color: var(--slate-light);">42–84 hours at ~$45/hr loaded</p>
+                </div>
+
+                <div style="background: var(--teal); color: var(--white); border-radius: 8px; padding: clamp(0.6rem, 1.5vw, 1rem);">
+                    <p style="font-size: var(--label-size); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.75;">Combined</p>
+                    <p style="font-size: var(--h3-size); font-weight: 700; margin: 0.2em 0;">$15k – $27k</p>
+                    <p style="font-size: var(--small-size); opacity: 0.8;">Likely range: $16k–$22k</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- =============================================
+     SLIDE 10 — THREE OPTIONS
+     ============================================= -->
+<section class="slide bg-white" id="slide-10" aria-label="Three Options">
+    <header class="slide-header">
+        <img src="USEFULL-icons/USEFULL-Logo-Registered_Color.svg" alt="USEFULL" class="logo">
+        <span class="slide-num">10 / 11</span>
+    </header>
+    <div class="slide-body">
+        <div class="eyebrow reveal">Decision Framework</div>
+        <h2 class="reveal">Three Options</h2>
+
+        <div class="options-grid reveal">
+            <!-- Option A -->
+            <div class="option-card" style="border-top: 3px solid var(--teal);">
+                <div class="option-label">Option A</div>
+                <h3>Engage Consultant — Stage-Gated Pilot</h3>
+                <p class="option-meta">2-bin pilot at UMass Lowell · ~$36k–$65k all-in · 4–5 months</p>
+                <p style="font-size: var(--small-size); color: var(--slate); line-height: 1.5; margin-top: 0.3em;">
+                    Start with known bin geometry. Decision gate after pilot: does it work well enough? Only expand to 9 bins if pilot succeeds.
+                </p>
+                <div class="pro-con">
+                    <span class="pro"><span class="marker">+</span> Most thorough path; real CV expertise; proves concept before scaling</span>
+                    <span class="con"><span class="marker">–</span> Significant investment before we confirm the problem it solves is actually driving losses</span>
+                </div>
+            </div>
+
+            <!-- Option B -->
+            <div class="option-card" style="border-top: 3px solid var(--golden);">
+                <div class="option-label">Option B</div>
+                <h3>Small Internal Pilot — No Consultant</h3>
+                <p class="option-meta">Off-the-shelf cameras · basic motion detection · lower upfront cost</p>
+                <p style="font-size: var(--small-size); color: var(--slate); line-height: 1.5; margin-top: 0.3em;">
+                    Use existing team knowledge to prototype a simpler version. Skip custom throat design to start.
+                </p>
+                <div class="pro-con">
+                    <span class="pro"><span class="marker">+</span> Cheaper to start; keeps optionality; builds internal knowledge</span>
+                    <span class="con"><span class="marker">–</span> No CV expertise on team; risk of building something that doesn't actually validate the concept</span>
+                </div>
+            </div>
+
+            <!-- Option C -->
+            <div class="option-card" style="border-top: 3px solid var(--slate-light);">
+                <div class="option-label" style="color: var(--slate-light);">Option C</div>
+                <h3>Shelve for Now</h3>
+                <p class="option-meta">Gather loss data first · revisit when loss driver is confirmed</p>
+                <p style="font-size: var(--small-size); color: var(--slate); line-height: 1.5; margin-top: 0.3em;">
+                    Focus on the root causes suggested by NAU and Lowell feedback. Confirm return-station fraud is a significant driver before investing.
+                </p>
+                <div class="pro-con">
+                    <span class="pro"><span class="marker">+</span> No investment risk; addresses "are we solving the right problem?" first</span>
+                    <span class="con"><span class="marker">–</span> If the CEO's instinct is right, we lose time; consultant may not be available later</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- =============================================
+     SLIDE 11 — KEY UNKNOWNS & NEXT STEPS
+     ============================================= -->
+<section class="slide bg-foam" id="slide-11" aria-label="Key Unknowns and Next Steps">
+    <header class="slide-header">
+        <img src="USEFULL-icons/USEFULL-Logo-Registered_Color.svg" alt="USEFULL" class="logo">
+        <span class="slide-num">11 / 11</span>
+    </header>
+    <div class="slide-body">
+        <div class="eyebrow reveal">Before We Decide</div>
+        <h2 class="reveal">Key Unknowns & Recommended Next Steps</h2>
+
+        <div class="two-col reveal" style="align-items: start;">
+            <div>
+                <p style="font-size: var(--small-size); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--slate-light); margin-bottom: 0.5em;">What we don't know yet</p>
+                <div class="unknowns-grid" style="grid-template-columns: 1fr;">
+                    <div class="unknown-item">
+                        <div class="unknown-icon">
+                            <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="#D69A2D" stroke-width="1.5"/><text x="5" y="8" text-anchor="middle" font-size="7" fill="#D69A2D" font-family="DM Sans,sans-serif" font-weight="700">?</text></svg>
+                        </div>
+                        Whether return-station fraud is actually a significant source of container loss (NAU + Lowell evidence suggests maybe not)
+                    </div>
+                    <div class="unknown-item">
+                        <div class="unknown-icon">
+                            <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="#D69A2D" stroke-width="1.5"/><text x="5" y="8" text-anchor="middle" font-size="7" fill="#D69A2D" font-family="DM Sans,sans-serif" font-weight="700">?</text></svg>
+                        </div>
+                        Whether the no-illumination approach works in real dining hall lighting on wet, reflective surfaces
+                    </div>
+                    <div class="unknown-item">
+                        <div class="unknown-icon">
+                            <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="#D69A2D" stroke-width="1.5"/><text x="5" y="8" text-anchor="middle" font-size="7" fill="#D69A2D" font-family="DM Sans,sans-serif" font-weight="700">?</text></svg>
+                        </div>
+                        Whether NAU's existing bins can accommodate the system — or if they'd adopt USEFULL return stations
+                    </div>
+                    <div class="unknown-item">
+                        <div class="unknown-icon">
+                            <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="#D69A2D" stroke-width="1.5"/><text x="5" y="8" text-anchor="middle" font-size="7" fill="#D69A2D" font-family="DM Sans,sans-serif" font-weight="700">?</text></svg>
+                        </div>
+                        Whether Nadia's bandwidth can absorb this without impacting the roadmap
+                    </div>
+                    <div class="unknown-item">
+                        <div class="unknown-icon">
+                            <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="#D69A2D" stroke-width="1.5"/><text x="5" y="8" text-anchor="middle" font-size="7" fill="#D69A2D" font-family="DM Sans,sans-serif" font-weight="700">?</text></svg>
+                        </div>
+                        Exact mechanical fit — 1.75" rails are tight once fasteners, brackets, and cable bends are added
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <p style="font-size: var(--small-size); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--slate-light); margin-bottom: 0.5em;">Regardless of which option — immediate next steps</p>
+                <ol class="steps-list">
+                    <li>
+                        <div class="step-num">1</div>
+                        Quantify the actual loss rate at return stations specifically, vs. other points in the container lifecycle
+                    </li>
+                    <li>
+                        <div class="step-num">2</div>
+                        Clarify whether NAU needs to use existing bins or would adopt USEFULL return stations
+                    </li>
+                    <li>
+                        <div class="step-num">3</div>
+                        If proceeding: start with a 2-bin pilot at one site with known geometry — don't try to solve modularity first
+                    </li>
+                </ol>
+
+                <div class="bottom-line">
+                    <p>
+                        A camera-based return verification system is technically plausible. The question is whether it solves the right problem, and whether the investment is justified given what we're learning about where containers are actually being lost.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<script>
+    /* ===========================================
+       SLIDE PRESENTATION CONTROLLER
+       Handles scroll-snap navigation, keyboard,
+       touch/swipe, animation triggers, progress bar,
+       and navigation dots.
+       =========================================== */
+
+    class SlidePresentation {
+        constructor() {
+            this.slides      = Array.from(document.querySelectorAll('.slide'));
+            this.total       = this.slides.length;
+            this.current     = 0;
+            this.scrolling   = false;
+
+            this.progressEl  = document.getElementById('progress');
+            this.navDotsEl   = document.getElementById('nav-dots');
+            this.kbdHint     = document.getElementById('kbd-hint');
+
+            this.buildNavDots();
+            this.bindKeyboard();
+            this.bindWheel();
+            this.bindTouch();
+            this.observeSlides();
+            this.updateState(0);
+
+            // Trigger visibility on the first slide immediately
+            this.slides[0].classList.add('visible');
+        }
+
+        /* Build one dot per slide in the side nav */
+        buildNavDots() {
+            this.slides.forEach((slide, i) => {
+                const dot = document.createElement('button');
+                dot.className = 'dot';
+                dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+                dot.addEventListener('click', () => this.goTo(i));
+                this.navDotsEl.appendChild(dot);
+            });
+        }
+
+        /* Update progress bar and active dot */
+        updateState(index) {
+            this.current = index;
+
+            // Progress bar
+            const pct = this.total > 1 ? (index / (this.total - 1)) * 100 : 100;
+            this.progressEl.style.width = pct + '%';
+
+            // Dots
+            const dots = this.navDotsEl.querySelectorAll('.dot');
+            dots.forEach((d, i) => d.classList.toggle('active', i === index));
+        }
+
+        /* Navigate to a specific slide index */
+        goTo(index) {
+            if (index < 0 || index >= this.total) return;
+            this.slides[index].scrollIntoView({ behavior: 'smooth' });
+            this.updateState(index);
+
+            // Hide keyboard hint after first navigation
+            if (this.kbdHint) {
+                this.kbdHint.classList.add('hidden');
+            }
+        }
+
+        /* Keyboard: arrow keys, space, page up/down, home/end */
+        bindKeyboard() {
+            document.addEventListener('keydown', (e) => {
+                switch (e.key) {
+                    case 'ArrowDown':
+                    case 'ArrowRight':
+                    case ' ':
+                        e.preventDefault();
+                        this.goTo(this.current + 1);
+                        break;
+                    case 'ArrowUp':
+                    case 'ArrowLeft':
+                        e.preventDefault();
+                        this.goTo(this.current - 1);
+                        break;
+                    case 'PageDown':
+                        e.preventDefault();
+                        this.goTo(this.current + 1);
+                        break;
+                    case 'PageUp':
+                        e.preventDefault();
+                        this.goTo(this.current - 1);
+                        break;
+                    case 'Home':
+                        e.preventDefault();
+                        this.goTo(0);
+                        break;
+                    case 'End':
+                        e.preventDefault();
+                        this.goTo(this.total - 1);
+                        break;
+                }
+            });
+        }
+
+        /* Mouse wheel: discrete steps with debounce */
+        bindWheel() {
+            let lastWheel = 0;
+            document.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                const now = Date.now();
+                if (now - lastWheel < 600) return; // debounce
+                lastWheel = now;
+
+                if (e.deltaY > 0) {
+                    this.goTo(this.current + 1);
+                } else {
+                    this.goTo(this.current - 1);
+                }
+            }, { passive: false });
+        }
+
+        /* Touch/swipe navigation */
+        bindTouch() {
+            let startY = 0;
+            document.addEventListener('touchstart', (e) => {
+                startY = e.touches[0].clientY;
+            }, { passive: true });
+
+            document.addEventListener('touchend', (e) => {
+                const diff = startY - e.changedTouches[0].clientY;
+                if (Math.abs(diff) > 40) {
+                    if (diff > 0) {
+                        this.goTo(this.current + 1);
+                    } else {
+                        this.goTo(this.current - 1);
+                    }
+                }
+            }, { passive: true });
+        }
+
+        /* Intersection Observer: adds .visible to slides as they enter
+           viewport, triggering CSS reveal animations */
+        observeSlides() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+
+                        // Update current index
+                        const index = this.slides.indexOf(entry.target);
+                        if (index !== -1) {
+                            this.updateState(index);
+                        }
+                    }
+                });
+            }, {
+                threshold: 0.5,
+            });
+
+            this.slides.forEach((slide) => observer.observe(slide));
+        }
+    }
+
+    // Boot the presentation
+    const deck = new SlidePresentation();
+</script>
+
+</body>
+</html>

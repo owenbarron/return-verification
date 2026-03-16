@@ -1,0 +1,10 @@
+# PowerPoint temp/lock files
+~$*.pptx
+~$*.ppt
+
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
