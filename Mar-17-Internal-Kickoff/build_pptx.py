@@ -33,9 +33,9 @@ FOG         = RGBColor(237, 236, 232)
 WHITE       = RGBColor(255, 255, 255)
 RED_SOFT    = RGBColor(192,  57,  43)
 
-LOGO_PATH   = "USEFULL-icons/USEFULL-Icon-Registered_Color.svg"
-ICON_PNG    = "icon-512.png"   # fallback raster icon for pptx
-STATION_IMG = "return-station-concept.png"
+LOGO_PATH   = "../USEFULL-icons/USEFULL-Icon-Registered_Color.svg"
+ICON_PNG    = "../USEFULL-icons/icon-512.png"   # fallback raster icon for pptx
+STATION_IMG = "../return-station-concept.png"
 
 # Typography
 FONT = "Calibri"          # available on most systems

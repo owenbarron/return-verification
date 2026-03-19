@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joshua Follow-Up — USEFULL</title>
+
+    <!-- Fonts via Google Fonts: DM Sans (body) + DM Serif Display (display) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+
+    <style>
+        /* ===========================================
+           CSS CUSTOM PROPERTIES — USEFULL BRAND THEME
+           Edit these to change the entire look at once.
+           =========================================== */
+        :root {
+            /* USEFULL Brand Colors */
+            --teal:       #008C95;
+            --teal-dark:  #006b72;
+            --teal-light: #00adb8;
+            --golden:     #D69A2D;
+            --golden-light: #e8b54a;
+            --slate:      #4C4C4E;
+            --slate-light: #6e6e70;
+            --foam:       #DDF0EE;
+            --fog:        #EDECE8;
+            --white:      #ffffff;
+
+            /* Typography */
+            --font-display: 'DM Serif Display', Georgia, serif;
+            --font-body:    'DM Sans', system-ui, sans-serif;
+
+            /* Responsive type scale using clamp() */
+            --title-size:    clamp(2.7rem, 6.75vw, 5.6rem);
+            --h2-size:       clamp(1.95rem, 4.2vw, 3.3rem);
+            --h3-size:       clamp(1.5rem, 3vw, 2.25rem);
+            --body-size:     clamp(1.1rem, 1.8vw, 1.5rem);
+            --small-size:    clamp(0.95rem, 1.4vw, 1.2rem);
+            --label-size:    clamp(0.85rem, 1.2vw, 1.05rem);
+
+            /* Responsive spacing */
+            --slide-padding: clamp(1.5rem, 4vw, 4rem);
+            --content-gap:   clamp(0.75rem, 2vw, 2rem);
+            --element-gap:   clamp(0.4rem, 1vw, 0.9rem);
+
+            /* Animation */
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --duration:      0.55s;
+        }
+
+        /* ===========================================
+           RESET & BASE
+           =========================================== */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            height: 100%;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--slate);
+            background: var(--fog);
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        /* ===========================================
+           SLIDE CONTAINER
+           CRITICAL: Every slide = exactly one viewport.
+           overflow: hidden prevents any scroll within slides.
+           =========================================== */
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            overflow: hidden;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Alternating backgrounds */
+        .slide.bg-white  { background: var(--white); }
+        .slide.bg-foam   { background: var(--foam); }
+        .slide.bg-fog    { background: var(--fog); }
+        .slide.bg-teal   { background: var(--teal); color: var(--white); }
+
+        /* ===========================================
+           HEADER BAR (logo + slide number)
+           Always 52px tall, sits above content area.
+           =========================================== */
+        .slide-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: clamp(0.6rem, 1.5vw, 1rem) var(--slide-padding);
+            flex-shrink: 0;
+            height: 52px;
+        }
+
+        .slide-header .logo {
+            height: clamp(20px, 3vh, 30px);
+            width: auto;
+            display: block;
+        }
+
+        .slide-num {
+            font-size: var(--label-size);
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--slate-light);
+            opacity: 0.7;
+        }
+        .slide.bg-teal .slide-num { color: rgba(255,255,255,0.5); }
+
+        /* ===========================================
+           CONTENT AREA
+           flex: 1 takes remaining space after header.
+           overflow: hidden as double-protection.
+           =========================================== */
+        .slide-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 var(--slide-padding) var(--slide-padding);
+            overflow: hidden;
+            max-height: calc(100vh - 52px);
+            max-height: calc(100dvh - 52px);
+        }
+
+        /* ===========================================
+           TYPOGRAPHY
+           =========================================== */
+        h1 {
+            font-family: var(--font-display);
+            font-size: var(--title-size);
+            font-weight: 400;
+            line-height: 1.1;
+            color: var(--teal);
+        }
+
+        h2 {
+            font-family: var(--font-display);
+            font-size: var(--h2-size);
+            font-weight: 400;
+            line-height: 1.2;
+            color: var(--teal);
+            margin-bottom: clamp(0.6rem, 1.5vh, 1.2rem);
+        }
+
+        h3 {
+            font-size: var(--h3-size);
+            font-weight: 600;
+            line-height: 1.3;
+            color: var(--teal);
+        }
+
+        .bg-teal h1,
+        .bg-teal h2,
+        .bg-teal h3 { color: var(--white); }
+
+        p {
+            font-size: var(--body-size);
+            line-height: 1.6;
+            color: var(--slate);
+        }
+
+        .bg-teal p { color: rgba(255,255,255,0.85); }
+
+        .eyebrow {
+            font-size: var(--label-size);
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--golden);
+            margin-bottom: clamp(0.4rem, 1vh, 0.8rem);
+        }
+
+        .bg-teal .eyebrow { color: var(--golden-light); }
+
+        /* ===========================================
+           ACCENT ELEMENTS
+           =========================================== */
+        .callout {
+            border-left: 3px solid var(--golden);
+            padding-left: clamp(0.6rem, 1.5vw, 1rem);
+        }
+
+        .callout-teal {
+            border-left: 3px solid var(--teal);
+            padding-left: clamp(0.6rem, 1.5vw, 1rem);
+        }
+
+        .divider {
+            width: clamp(2rem, 6vw, 4rem);
+            height: 2px;
+            background: var(--golden);
+            margin-bottom: clamp(0.8rem, 2vh, 1.5rem);
+        }
+
+        /* ===========================================
+           BULLET LISTS
+           =========================================== */
+        .bullet-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: var(--element-gap);
+        }
+
+        .bullet-list li {
+            font-size: var(--body-size);
+            line-height: 1.5;
+            color: var(--slate);
+            display: flex;
+            align-items: flex-start;
+            gap: 0.6em;
+        }
+
+        .bullet-list li::before {
+            content: '';
+            display: block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--teal);
+            flex-shrink: 0;
+            margin-top: 0.45em;
+        }
+
+        .bg-teal .bullet-list li { color: rgba(255,255,255,0.88); }
+        .bg-teal .bullet-list li::before { background: var(--golden-light); }
+
+        /* Small bullet list variant */
+        .bullet-list.small li {
+            font-size: var(--small-size);
+        }
+
+        /* ===========================================
+           ANIMATIONS
+           .reveal = hidden by default.
+           .slide.visible .reveal = animated in.
+           JS adds .visible when slide enters viewport.
+           =========================================== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(18px);
+            transition: opacity var(--duration) var(--ease-out-expo),
+                        transform var(--duration) var(--ease-out-expo);
+        }
+
+        .slide.visible .reveal { opacity: 1; transform: translateY(0); }
+
+        /* Stagger children */
+        .reveal:nth-child(1) { transition-delay: 0.05s; }
+        .reveal:nth-child(2) { transition-delay: 0.15s; }
+        .reveal:nth-child(3) { transition-delay: 0.25s; }
+        .reveal:nth-child(4) { transition-delay: 0.35s; }
+        .reveal:nth-child(5) { transition-delay: 0.42s; }
+        .reveal:nth-child(6) { transition-delay: 0.49s; }
+        .reveal:nth-child(7) { transition-delay: 0.56s; }
+
+        /* Fade only (no translate) variant */
+        .reveal-fade {
+            opacity: 0;
+            transition: opacity 0.7s var(--ease-out-expo);
+        }
+        .slide.visible .reveal-fade { opacity: 1; }
+
+        /* ===========================================
+           NAVIGATION DOTS
+           Fixed on right edge, indicate current slide.
+           =========================================== */
+        #nav-dots {
+            position: fixed;
+            right: clamp(0.6rem, 2vw, 1.2rem);
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            z-index: 100;
+        }
+
+        .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: rgba(76, 76, 78, 0.25);
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        .dot.active {
+            background: var(--teal);
+            transform: scale(1.4);
+        }
+
+        /* ===========================================
+           PROGRESS BAR
+           Thin teal line at top showing progress.
+           =========================================== */
+        #progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 2px;
+            background: var(--teal);
+            width: 0%;
+            z-index: 200;
+            transition: width 0.3s var(--ease-out-expo);
+        }
+
+        /* ===========================================
+           KEYBOARD HINT (fades out after first nav)
+           =========================================== */
+        #kbd-hint {
+            position: fixed;
+            bottom: 1.2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: var(--label-size);
+            color: var(--slate-light);
+            opacity: 0.5;
+            letter-spacing: 0.06em;
+            transition: opacity 0.5s;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        #kbd-hint.hidden { opacity: 0; }
+
+        /* ===========================================
+           SLIDE 1: TITLE
+           =========================================== */
+        .title-slide .slide-body {
+            justify-content: flex-end;
+            padding-bottom: clamp(2rem, 5vh, 4rem);
+        }
+
+        .title-slide h1 {
+            font-size: clamp(3rem, 8.25vw, 6.75rem);
+            line-height: 1.05;
+            max-width: 14ch;
+        }
+
+        .title-meta {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-top: clamp(1rem, 2.5vh, 2rem);
+        }
+
+        .title-meta span {
+            font-size: var(--body-size);
+            color: var(--slate-light);
+        }
+
+        .title-meta .sep {
+            width: 1px;
+            height: 1em;
+            background: var(--slate-light);
+            opacity: 0.4;
+        }
+
+        /* Large decorative foam/teal block top-right */
+        .title-deco {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: clamp(200px, 35vw, 500px);
+            height: clamp(200px, 55vh, 600px);
+            background: var(--foam);
+            clip-path: polygon(100% 0, 100% 100%, 20% 100%, 0 0);
+            pointer-events: none;
+        }
+
+        .title-deco-inner {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: clamp(140px, 22vw, 320px);
+            height: clamp(140px, 36vh, 400px);
+            background: var(--teal);
+            opacity: 0.12;
+            clip-path: polygon(100% 0, 100% 100%, 30% 100%, 0 0);
+            pointer-events: none;
+        }
+
+        /* ===========================================
+           TWO-COLUMN LAYOUT
+           Used across several slides.
+           =========================================== */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: clamp(1rem, 3vw, 2.5rem);
+            align-items: start;
+        }
+
+        .two-col.wide-left  { grid-template-columns: 1.4fr 1fr; }
+        .two-col.wide-right { grid-template-columns: 1fr 1.4fr; }
+
+        /* ===========================================
+           COLUMN CARD
+           Bordered card used in 2 and 3-col layouts.
+           =========================================== */
+        .col-card {
+            background: var(--white);
+            border: 1px solid rgba(0,0,0,0.07);
+            border-radius: 8px;
+            padding: clamp(0.8rem, 2vw, 1.4rem);
+            height: 100%;
+        }
+
+        .col-card h3 {
+            font-size: var(--h3-size);
+            margin-bottom: 0.6em;
+        }
+
+        /* ===========================================
+           SECTION LABEL BADGE
+           Used to call out specific framing.
+           =========================================== */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4em;
+            background: rgba(0,140,149,0.1);
+            border: 1px solid rgba(0,140,149,0.2);
+            border-radius: 999px;
+            padding: 0.2em 0.8em;
+            font-size: var(--label-size);
+            font-weight: 600;
+            color: var(--teal-dark);
+            letter-spacing: 0.05em;
+            margin-bottom: clamp(0.6rem, 1.5vh, 1rem);
+        }
+
+        /* ===========================================
+           CONSTRAINT CARDS (Slide 4)
+           Two-column grid of working constraints.
+           =========================================== */
+        .constraint-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: clamp(0.6rem, 1.5vw, 1rem);
+            margin-top: clamp(0.5rem, 1.5vh, 1rem);
+        }
+
+        .constraint-card {
+            background: var(--white);
+            border-radius: 8px;
+            padding: clamp(0.7rem, 1.8vw, 1.2rem);
+            border: 1px solid rgba(0,0,0,0.07);
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8em;
+        }
+
+        .constraint-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            background: rgba(0,140,149,0.1);
+            border: 1px solid rgba(0,140,149,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: var(--teal);
+            font-size: 0.85rem;
+        }
+
+        .constraint-card p {
+            font-size: var(--small-size);
+            line-height: 1.5;
+            color: var(--slate);
+        }
+
+        /* ===========================================
+           GOALS LIST (Slide 5)
+           Numbered goal items with teal counter.
+           =========================================== */
+        .goals-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.5rem, 1.2vh, 0.9rem);
+            margin-top: clamp(0.5rem, 1.5vh, 1rem);
+        }
+
+        .goals-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.9em;
+            font-size: var(--body-size);
+            line-height: 1.5;
+            color: var(--slate);
+        }
+
+        .goal-num {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--teal);
+            color: var(--white);
+            font-size: var(--label-size);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 0.15em;
+        }
+
+        /* ===========================================
+           QUESTIONS LIST (Slide 6)
+           Q-prefixed items with golden accent.
+           =========================================== */
+        .questions-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.5rem, 1.2vh, 0.9rem);
+            margin-top: clamp(0.5rem, 1.5vh, 1rem);
+        }
+
+        .questions-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.9em;
+            font-size: var(--body-size);
+            line-height: 1.5;
+            color: var(--slate);
+        }
+
+        .q-badge {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            background: rgba(214,154,45,0.12);
+            border: 1px solid rgba(214,154,45,0.3);
+            color: var(--golden);
+            font-size: var(--label-size);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 0.15em;
+        }
+
+        /* ===========================================
+           ROLES GRID (Slide 7)
+           Four role cards in a 2×2 grid.
+           =========================================== */
+        .roles-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: clamp(0.7rem, 1.5vw, 1.1rem);
+            margin-top: clamp(0.5rem, 1.5vh, 1rem);
+        }
+
+        .role-card {
+            background: var(--white);
+            border-radius: 8px;
+            padding: clamp(0.8rem, 2vw, 1.2rem);
+            border: 1px solid rgba(0,0,0,0.07);
+        }
+
+        .role-name {
+            font-size: var(--label-size);
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--teal-dark);
+            margin-bottom: 0.3em;
+        }
+
+        .role-title {
+            font-size: var(--small-size);
+            font-weight: 600;
+            color: var(--slate);
+            margin-bottom: 0.4em;
+        }
+
+        .role-card p {
+            font-size: var(--small-size);
+            color: var(--slate-light);
+            line-height: 1.5;
+        }
+
+        /* ===========================================
+           OUTCOMES LIST (Slide 8)
+           Checkmark-style list for desired outcomes.
+           =========================================== */
+        .outcomes-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.5rem, 1.2vh, 1rem);
+            margin-top: clamp(0.6rem, 1.5vh, 1.2rem);
+        }
+
+        .outcomes-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8em;
+            font-size: var(--body-size);
+            line-height: 1.5;
+            color: var(--slate);
+        }
+
+        .check-icon {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: rgba(0,140,149,0.12);
+            border: 1.5px solid rgba(0,140,149,0.3);
+            color: var(--teal);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 0.2em;
+            font-size: 0.7rem;
+        }
+
+        /* ===========================================
+           NEXT STEPS TABLE (Slide 9)
+           Owner + action rows.
+           =========================================== */
+        .steps-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: clamp(0.6rem, 1.5vh, 1.2rem);
+        }
+
+        .steps-table th {
+            background: var(--teal);
+            color: var(--white);
+            padding: clamp(0.35rem, 0.8vh, 0.55rem) clamp(0.6rem, 1vw, 0.9rem);
+            text-align: left;
+            font-size: var(--label-size);
+            font-weight: 500;
+            letter-spacing: 0.05em;
+        }
+
+        .steps-table td {
+            padding: clamp(0.35rem, 0.8vh, 0.6rem) clamp(0.6rem, 1vw, 0.9rem);
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+            font-size: var(--small-size);
+            color: var(--slate);
+            vertical-align: middle;
+        }
+
+        .steps-table tr:nth-child(even) td {
+            background: rgba(0,0,0,0.02);
+        }
+
+        .owner-pill {
+            display: inline-block;
+            background: rgba(0,140,149,0.1);
+            border: 1px solid rgba(0,140,149,0.2);
+            border-radius: 999px;
+            padding: 0.1em 0.7em;
+            font-size: var(--label-size);
+            font-weight: 600;
+            color: var(--teal-dark);
+            white-space: nowrap;
+        }
+
+        .owner-pill.golden {
+            background: rgba(214,154,45,0.1);
+            border-color: rgba(214,154,45,0.25);
+            color: #8a6000;
+        }
+
+        .owner-pill.slate {
+            background: rgba(76,76,78,0.08);
+            border-color: rgba(76,76,78,0.15);
+            color: var(--slate);
+        }
+
+        /* ===========================================
+           BOTTOM LINE CALLOUT
+           =========================================== */
+        .bottom-line {
+            background: rgba(0,140,149,0.06);
+            border: 1px solid rgba(0,140,149,0.18);
+            border-left: 4px solid var(--teal);
+            border-radius: 0 6px 6px 0;
+            padding: clamp(0.6rem, 1.5vh, 1rem) clamp(0.8rem, 2vw, 1.4rem);
+            margin-top: clamp(0.6rem, 1.5vh, 1rem);
+        }
+
+        .bottom-line p {
+            font-size: var(--small-size);
+            line-height: 1.6;
+            color: var(--teal-dark);
+            font-style: italic;
+        }
+
+        /* ===========================================
+           CLOSING QUOTE SLIDE
+           =========================================== */
+        .quote-slide .slide-body {
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .big-quote {
+            font-family: var(--font-display);
+            font-size: clamp(1.4rem, 3.5vw, 2.8rem);
+            line-height: 1.35;
+            color: var(--white);
+            max-width: 28ch;
+            margin-bottom: clamp(1rem, 2.5vh, 2rem);
+        }
+
+        .quote-mark {
+            font-family: var(--font-display);
+            font-size: clamp(4rem, 10vw, 8rem);
+            line-height: 0.7;
+            color: rgba(255,255,255,0.12);
+            display: block;
+            margin-bottom: clamp(0.5rem, 1.5vh, 1rem);
+        }
+
+        /* ===========================================
+           RESPONSIVE BREAKPOINTS
+           =========================================== */
+        @media (max-height: 700px) {
+            :root {
+                --slide-padding: clamp(1rem, 3vw, 2rem);
+                --content-gap:   clamp(0.5rem, 1.5vw, 1rem);
+                --title-size:    clamp(2.25rem, 6vw, 4.2rem);
+                --h2-size:       clamp(1.65rem, 3.75vw, 2.7rem);
+                --body-size:     clamp(0.9rem, 1.5vw, 1.2rem);
+                --small-size:    clamp(0.8rem, 1.2vw, 1rem);
+            }
+        }
+
+        @media (max-height: 600px) {
+            :root {
+                --slide-padding: clamp(0.75rem, 2.5vw, 1.5rem);
+                --title-size:    clamp(1.875rem, 5.25vw, 3rem);
+                --h2-size:       clamp(1.5rem, 3vw, 2.25rem);
+                --body-size:     clamp(0.85rem, 1.3vw, 1.05rem);
+                --small-size:    clamp(0.75rem, 1.1vw, 0.92rem);
+            }
+            #nav-dots, #kbd-hint { display: none; }
+            .slide-header { height: 40px; }
+        }
+
+        @media (max-height: 500px) {
+            :root {
+                --slide-padding: clamp(0.5rem, 2vw, 1rem);
+                --title-size:    clamp(1.65rem, 4.5vw, 2.4rem);
+                --body-size:     clamp(0.75rem, 1.2vw, 0.95rem);
+                --small-size:    clamp(0.65rem, 1vw, 0.82rem);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .two-col,
+            .two-col.wide-left,
+            .two-col.wide-right { grid-template-columns: 1fr; }
+
+            .constraint-grid { grid-template-columns: 1fr; }
+            .roles-grid       { grid-template-columns: 1fr 1fr; }
+        }
+
+        /* ===========================================
+           REDUCED MOTION
+           =========================================== */
+        @media (prefers-reduced-motion: reduce) {
+            .reveal, .reveal-fade {
+                transition: opacity 0.2s ease;
+                transform: none;
+            }
+            html { scroll-behavior: auto; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Progress indicator -->
+<div id="progress"></div>
+
+<!-- Navigation dots -->
+<nav id="nav-dots" aria-label="Slide navigation"></nav>
+
+<!-- Keyboard hint -->
+<div id="kbd-hint">Arrow keys or scroll to navigate</div>
+
+
+<!-- =============================================
+     SLIDE 1 — TITLE
+     ============================================= -->
+<section class="slide bg-foam title-slide" id="slide-1" aria-label="Title slide">
+    <div class="title-deco" aria-hidden="true"></div>
+    <div class="title-deco-inner" aria-hidden="true"></div>
+
+    <header class="slide-header">
+        <img src="../USEFULL-icons/USEFULL-Logo-Registered_Color.svg" alt="USEFULL" class="logo">
+        <span class="slide-num">01 / 09</span>
+    </header>
+
+    <div class="slide-body">
+        <div class="eyebrow reveal">Consulting Engagement</div>
+        <h1 class="reveal">AI-Powered USEFULL Returns</h1>
+        <div class="divider reveal"></div>
+        <p class="reveal" style="max-width: 48ch; color: var(--slate-light);">Structuring a phase-1 consulting engagement</p>
+        <div class="title-meta reveal">
+            <span>Owen Barron</span>
+            <span class="sep"></span>
+            <span>March 19, 2026</span>
+        </div>
+    </div>
+</section>
+
+
+<!-- =============================================
+     SLIDE 2 — WHY WE'RE MOVING FORWARD
+     ============================================= -->
+<section class="slide bg-white" id="slide-2" aria-label="Why We're Moving Forward">
+    <header class="slide-header">
+        <img src="../USEFULL-icons/USEFULL-Logo-Registered_Color.svg" alt="USEFULL" class="logo">
+        <span class="slide-num">02 / 09</span>
+    </header>
+    <div class="slide-body">
+        <div class="eyebrow reveal">Context</div>
+        <h2 class="reveal">Why We're Moving Forward</h2>
+
+        <div class="two-col reveal" style="margin-top: clamp(0.5rem, 1.5vh, 1rem);">
+            <div>
+                <ul class="bullet-list">
+                    <li>Leadership is interested in pursuing AI-camera return verification</li>
+                    <li>Timeline: January on-campus pilot for NAU</li>
+                    <li>A staged approach reduces risk before heavier internal investment</li>
+                    <li>Joshua's initial guidance validated that the concept is feasible to explore</li>
+                </ul>
+            </div>
+            <div>
+                <div class="col-card">
+                    <div class="eyebrow" style="font-size: var(--label-size);">The core idea</div>
+                    <p style="font-size: var(--small-size); color: var(--slate); line-height: 1.6;">
+                        Use a camera at the bin throat to verify a real container was returned — not just that a QR code was scanned. Joshua's key insight: focus on the entrance, not the bin interior. More cameras beats better cameras.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-line reveal">
+            <p>This isn't a commitment to build — it's a commitment to learn in a disciplined way before investing more.</p>
+        </div>
+    </div>
+</section>
+
+
+<!-- =============================================
+     SLIDE 3 — DECISION SO FAR
+     ============================================= -->
+<section class="slide bg-fog" id="slide-3" aria-label="Decision So Far">
+    <header class="slide-header">
+        <img src="../USEFULL-icons/USEFULL-Logo-Registered_Color.svg" alt="USEFULL" class="logo">
+        <span class="slide-num">03 / 09</span>
+    </header>
+    <div class="slide-body">
+        <div class="eyebrow reveal">Where We Stand</div>
+        <h2 class="reveal">Decision So Far</h2>
+
+        <!-- Three-step decision path -->
+        <div class="reveal" style="display: flex; gap: clamp(0.6rem, 1.5vw, 1rem); margin-top: clamp(0.6rem, 1.5vh, 1.2rem); align-items: stretch;">
+            <!-- Option A — selected -->
+            <div style="flex: 1; background: var(--teal); color: var(--white); border-radius: 10px; padding: clamp(0.9rem, 2vw, 1.5rem); position: relative; overflow: hidden;">
+                <div style="position: absolute; top: 0.6rem; right: 0.8rem; background: var(--golden); color: var(--white); font-size: var(--label-size); font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 999px; padding: 0.1em 0.6em;">Selected</div>
+                <div style="font-family: var(--font-display); font-size: clamp(1rem, 2vw, 1.5rem); color: rgba(255,255,255,0.45); margin-bottom: 0.3em;">Path A</div>
+                <div style="font-size: var(--body-size); font-weight: 600; line-height: 1.3; margin-bottom: 0.6em;">Engage the consultant</div>
+                <p style="font-size: var(--small-size); color: rgba(255,255,255,0.8); line-height: 1.5;">Run a focused feasibility phase with Joshua as the technical lead. USEFULL owns PM and coordination.</p>
+            </div>
+            <!-- Option B — not selected -->
+            <div style="flex: 1; background: var(--white); border: 1px solid rgba(0,0,0,0.08); border-radius: 10px; padding: clamp(0.9rem, 2vw, 1.5rem); opacity: 0.55;">
+                <div style="font-family: var(--font-display); font-size: clamp(1rem, 2vw, 1.5rem); color: var(--slate-light); margin-bottom: 0.3em;">Path B</div>
+                <div style="font-size: var(--body-size); font-weight: 600; color: var(--slate); line-height: 1.3; margin-bottom: 0.6em;">Small internal pilot</div>
+                <p style="font-size: var(--small-size); color: var(--slate-light); line-height: 1.5;">Explore with Nadia. Higher distraction risk; lower external dependency.</p>
+            </div>
+            <!-- Option C — not selected -->
+            <div style="flex: 1; background: var(--white); border: 1px solid rgba(0,0,0,0.08); border-radius: 10px; padding: clamp(0.9rem, 2vw, 1.5rem); opacity: 0.55;">
+                <div style="font-family: var(--font-display); font-size: clamp(1rem, 2vw, 1.5rem); color: var(--slate-light); margin-bottom: 0.3em;">Path C</div>
+                <div style="font-size: var(--body-size); font-weight: 600; color: var(--slate); line-height: 1.3; margin-bottom: 0.6em;">Shelve for now</div>
+                <p style="font-size: var(--small-size); color: var(--slate-light); line-height: 1.5;">Revisit when roadmap creates more room.</p>
+            </div>
+        </div>
+
+        <div class="callout reveal" style="margin-top: clamp(0.8rem, 2vh, 1.4rem);">
+            <p style="font-size: var(--small-size);">Phase 1 is feasibility-first — not a production commitment. The goal is to narrow uncertainty and decide whether to continue.</p>
+        </div>
+    </div>
+</section>
+
+
+<!-- =============================================
+     SLIDE 4 — WORKING CONSTRAINTS
+     ============================================= -->
+<section class="slide bg-white" id="slide-4" aria-label="Working Constraints">
+    <header class="slide-header">
+        <img src="../USEFULL-icons/USEFULL-Logo-Registered_Color.svg" alt="USEFULL" class="logo">
+        <span class="slide-num">04 / 09</span>
+    </header>
+    <div class="slide-body">
+        <div class="eyebrow reveal">For Scoping Purposes</div>
+        <h2 class="reveal">Working Constraints</h2>
+
+        <div class="constraint-grid reveal">
+            <div class="constraint-card">
+                <div class="constraint-icon">~</div>
+                <p><strong>Owen at 20–30% allocation</strong> — available for PM, coordination, and continuity. Not full-time on this.</p>
+            </div>
+            <div class="constraint-card">
+                <div class="constraint-icon" style="background: rgba(214,154,45,0.1); border-color: rgba(214,154,45,0.25); color: var(--golden);">✗</div>
+                <p><strong>No Nadia in phase 1</strong> — keep her on core product roadmap. Product engineering integration is out of scope for now.</p>
+            </div>
+            <div class="constraint-card">
+                <div class="constraint-icon">?</div>
+                <p><strong>Dev support via Igor</strong> — a dev resource may come through Igor, but this still needs clarification.</p>
+            </div>
+            <div class="constraint-card">
+                <div class="constraint-icon">→</div>
+                <p><strong>Prefer a scoped first phase</strong> — clear start, clear end, clear deliverable. Avoid open-ended retainers.</p>
+            </div>
+        </div>
+
+        <div class="bottom-line reveal">
+            <p>These constraints are meant to help Joshua scope the work, not to limit what's possible in later phases.</p>
+        </div>
+    </div>
+</section>
+
+
+<!-- =============================================
+     SLIDE 5 — WHAT PHASE 1 SHOULD ACCOMPLISH
+     ============================================= -->
+<section class="slide bg-foam" id="slide-5" aria-label="What Phase 1 Should Accomplish">
+    <header class="slide-header">
+        <img src="../USEFULL-icons/USEFULL-Logo-Registered_Color.svg" alt="USEFULL" class="logo">
+        <span class="slide-num">05 / 09</span>
+    </header>
+    <div class="slide-body">
+        <div class="eyebrow reveal">Phase 1 Goals</div>
+        <h2 class="reveal">What Phase 1 Should Accomplish</h2>
+
+        <ol class="goals-list reveal">
+            <li>
+                <div class="goal-num">1</div>
+                <span>Clarify the right scope for early feasibility work — what questions are we actually trying to answer?</span>
+            </li>
+            <li>
+                <div class="goal-num">2</div>
+                <span>Identify the main technical and operational risks before deeper investment</span>
+            </li>
+            <li>
+                <div class="goal-num">3</div>
+                <span>Define what kind of early prototype or proof work makes sense first</span>
+            </li>
+            <li>
+                <div class="goal-num">4</div>
+                <span>Establish what people, hardware, and access are needed</span>
+            </li>
+            <li>
+                <div class="goal-num">5</div>
+                <span>Produce enough clarity for USEFULL to decide whether to continue — and how</span>
+            </li>
+        </ol>
+
+        <div class="callout reveal" style="margin-top: clamp(0.8rem, 2vh, 1.4rem);">
+            <p style="font-size: var(--small-size);">The deliverable from phase 1 is a decision, not a product. If we finish and decide not to proceed, that's a successful phase.</p>
+        </div>
+    </div>
+</section>
+
+
+<!-- =============================================
+     SLIDE 6 — QUESTIONS FOR JOSHUA
+     ============================================= -->
+<section class="slide bg-white" id="slide-6" aria-label="Questions for Joshua">
+    <header class="slide-header">
+        <img src="../USEFULL-icons/USEFULL-Logo-Registered_Color.svg" alt="USEFULL" class="logo">
+        <span class="slide-num">06 / 09</span>
+    </header>
+    <div class="slide-body">
+        <div class="eyebrow reveal">For Discussion</div>
+        <h2 class="reveal">Questions We Need Joshua To Help Answer</h2>
+
+        <ol class="questions-list reveal">
+            <li>
+                <div class="q-badge">Q</div>
+                <span>What should the first engagement actually cover — and what's out of scope?</span>
+            </li>
+            <li>
+                <div class="q-badge">Q</div>
+                <span>What role should Joshua play: advisor, hands-on consultant, technical lead, or hybrid?</span>
+            </li>
+            <li>
+                <div class="q-badge">Q</div>
+                <span>What inputs does Joshua need from USEFULL to scope phase 1 accurately?</span>
+            </li>
+            <li>
+                <div class="q-badge">Q</div>
+                <span>What should a useful proposal include — format, granularity, milestones?</span>
+            </li>
+            <li>
+                <div class="q-badge">Q</div>
+                <span>What timeline and sequencing would be realistic for a first phase?</span>
+            </li>
+        </ol>
+    </div>
+</section>
+
+
+<!-- =============================================
+     SLIDE 7 — RESOURCING / OPERATING MODEL
+     ============================================= -->
+<section class="slide bg-fog" id="slide-7" aria-label="Resourcing and Operating Model">
+    <header class="slide-header">
+        <img src="../USEFULL-icons/USEFULL-Logo-Registered_Color.svg" alt="USEFULL" class="logo">
+        <span class="slide-num">07 / 09</span>
+    </header>
+    <div class="slide-body">
+        <div class="eyebrow reveal">Operating Model</div>
+        <h2 class="reveal">Resourcing</h2>
+
+        <div class="roles-grid reveal">
+            <div class="role-card">
+                <div class="role-name">Joshua</div>
+                <div class="role-title">Consulting Lead &amp; Technical Partner</div>
+                <p>Feasibility direction, prototype oversight, technical risk identification. Role and structure to be scoped in proposal.</p>
+            </div>
+            <div class="role-card">
+                <div class="role-name">Owen</div>
+                <div class="role-title">PM &amp; Internal Owner</div>
+                <p>Coordination, research continuity, stakeholder communication. ~20–30% allocation.</p>
+            </div>
+            <div class="role-card">
+                <div class="role-name">Igor</div>
+                <div class="role-title">Technical Advisor</div>
+                <p>Technical direction and possible source of dev support. Dev-resource posture still TBC.</p>
+            </div>
+            <div class="role-card">
+                <div class="role-name">MJ / Leadership</div>
+                <div class="role-title">Business Owner</div>
+                <p>Budget constraints, operational alignment, and final go/no-go on continuing after phase 1.</p>
+            </div>
+        </div>
+
+        <div class="bottom-line reveal">
+            <p>Product engineering (Nadia, Yulia) is not phase-1 scope. Integration work comes later, if we proceed.</p>
+        </div>
+    </div>
+</section>
+
+
+<!-- =============================================
+     SLIDE 8 — DESIRED OUTCOME FROM TODAY
+     ============================================= -->
+<section class="slide bg-white" id="slide-8" aria-label="Desired Outcome From Today">
+    <header class="slide-header">
+        <img src="../USEFULL-icons/USEFULL-Logo-Registered_Color.svg" alt="USEFULL" class="logo">
+        <span class="slide-num">08 / 09</span>
+    </header>
+    <div class="slide-body">
+        <div class="eyebrow reveal">Today's Goal</div>
+        <h2 class="reveal">What We Want To Leave With</h2>
+
+        <ul class="outcomes-list reveal">
+            <li>
+                <div class="check-icon">✓</div>
+                <span>Shared understanding of what phase 1 is actually for</span>
+            </li>
+            <li>
+                <div class="check-icon">✓</div>
+                <span>Agreement on what Joshua will include in a proposal</span>
+            </li>
+            <li>
+                <div class="check-icon">✓</div>
+                <span>Agreement on what USEFULL will send after the meeting</span>
+            </li>
+            <li>
+                <div class="check-icon">✓</div>
+                <span>A target date for the proposal</span>
+            </li>
+            <li>
+                <div class="check-icon">✓</div>
+                <span>A follow-up review meeting scheduled</span>
+            </li>
+        </ul>
+
+        <div class="callout reveal" style="margin-top: clamp(0.8rem, 2vh, 1.4rem);">
+            <p style="font-size: var(--small-size);">We don't need to finalize architecture, lock milestones, or re-debate the research case today. That comes in the proposal.</p>
+        </div>
+    </div>
+</section>
+
+
+<!-- =============================================
+     SLIDE 9 — NEXT STEPS
+     ============================================= -->
+<section class="slide bg-teal" id="slide-9" aria-label="Next Steps">
+    <header class="slide-header">
+        <img src="../USEFULL-icons/USEFULL-Logo-Registered_Color.svg" alt="USEFULL" class="logo">
+        <span class="slide-num">09 / 09</span>
+    </header>
+    <div class="slide-body">
+        <div class="eyebrow reveal">After Today</div>
+        <h2 class="reveal">Next Steps</h2>
+
+        <table class="steps-table reveal">
+            <thead>
+                <tr>
+                    <th style="width: 25%;">Owner</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="owner-pill golden">Joshua</span></td>
+                    <td style="color: var(--slate);">Draft proposal / scope outline for phase 1</td>
+                </tr>
+                <tr>
+                    <td><span class="owner-pill">Owen</span></td>
+                    <td style="color: var(--slate);">Send follow-up notes and relevant materials</td>
+                </tr>
+                <tr>
+                    <td><span class="owner-pill slate">Igor</span></td>
+                    <td style="color: var(--slate);">Confirm dev-resource posture and availability</td>
+                </tr>
+                <tr>
+                    <td><span class="owner-pill slate">Leadership</span></td>
+                    <td style="color: var(--slate);">Confirm budget guardrails and proposal review path</td>
+                </tr>
+                <tr>
+                    <td><span class="owner-pill">All</span></td>
+                    <td style="color: var(--slate);">Schedule proposal review meeting</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="reveal" style="margin-top: clamp(1rem, 2.5vh, 2rem); background: rgba(255,255,255,0.1); border-left: 3px solid var(--golden-light); padding: clamp(0.6rem, 1.5vh, 1rem) clamp(0.8rem, 2vw, 1.4rem); border-radius: 0 6px 6px 0;">
+            <p style="font-size: var(--small-size); color: rgba(255,255,255,0.9); font-style: italic; line-height: 1.6;">
+                "We want to leave this meeting aligned on what a sensible phase-1 engagement would be, what you need from us to scope it, and how we get from here to a written proposal."
+            </p>
+        </div>
+    </div>
+</section>
+
+
+<script>
+    /* ===========================================
+       SLIDE PRESENTATION CONTROLLER
+       Handles navigation, animation triggers,
+       progress bar, and nav dots.
+       =========================================== */
+
+    class SlidePresentation {
+        constructor() {
+            this.slides = Array.from(document.querySelectorAll('.slide'));
+            this.totalSlides = this.slides.length;
+            this.currentSlide = 0;
+            this.isScrolling = false;
+
+            this.progressEl = document.getElementById('progress');
+            this.navDotsEl  = document.getElementById('nav-dots');
+            this.kbdHint    = document.getElementById('kbd-hint');
+
+            this.buildNavDots();
+            this.initObserver();
+            this.bindEvents();
+            this.updateProgress(0);
+        }
+
+        /* Build one dot per slide */
+        buildNavDots() {
+            this.slides.forEach((slide, i) => {
+                const dot = document.createElement('button');
+                dot.className = 'dot' + (i === 0 ? ' active' : '');
+                dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+                dot.addEventListener('click', () => this.goTo(i));
+                this.navDotsEl.appendChild(dot);
+            });
+        }
+
+        /* IntersectionObserver: adds .visible when slide enters viewport,
+           updates progress bar and active dot. */
+        initObserver() {
+            const opts = { threshold: 0.6 };
+            const obs  = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        const idx = this.slides.indexOf(entry.target);
+                        this.currentSlide = idx;
+                        this.updateProgress(idx);
+                        this.updateDots(idx);
+                    }
+                });
+            }, opts);
+            this.slides.forEach(s => obs.observe(s));
+        }
+
+        updateProgress(idx) {
+            const pct = this.totalSlides > 1
+                ? (idx / (this.totalSlides - 1)) * 100
+                : 100;
+            this.progressEl.style.width = pct + '%';
+        }
+
+        updateDots(idx) {
+            const dots = this.navDotsEl.querySelectorAll('.dot');
+            dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+        }
+
+        goTo(idx) {
+            if (idx < 0 || idx >= this.totalSlides) return;
+            this.slides[idx].scrollIntoView({ behavior: 'smooth' });
+            this.hideKbdHint();
+        }
+
+        goNext() { this.goTo(this.currentSlide + 1); }
+        goPrev() { this.goTo(this.currentSlide - 1); }
+
+        hideKbdHint() {
+            this.kbdHint.classList.add('hidden');
+        }
+
+        bindEvents() {
+            /* Keyboard navigation */
+            document.addEventListener('keydown', (e) => {
+                switch (e.key) {
+                    case 'ArrowDown':
+                    case 'ArrowRight':
+                    case ' ':
+                        e.preventDefault();
+                        this.goNext();
+                        break;
+                    case 'ArrowUp':
+                    case 'ArrowLeft':
+                        e.preventDefault();
+                        this.goPrev();
+                        break;
+                }
+            });
+
+            /* Touch / swipe */
+            let touchStartY = 0;
+            document.addEventListener('touchstart', (e) => {
+                touchStartY = e.touches[0].clientY;
+            }, { passive: true });
+
+            document.addEventListener('touchend', (e) => {
+                const delta = touchStartY - e.changedTouches[0].clientY;
+                if (Math.abs(delta) > 50) {
+                    delta > 0 ? this.goNext() : this.goPrev();
+                    this.hideKbdHint();
+                }
+            }, { passive: true });
+
+            /* Hide hint on first manual scroll */
+            window.addEventListener('scroll', () => {
+                this.hideKbdHint();
+            }, { once: true, passive: true });
+        }
+    }
+
+    // Boot
+    document.addEventListener('DOMContentLoaded', () => new SlidePresentation());
+</script>
+</body>
+</html>
